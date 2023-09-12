@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphFlix - API", "GraphFlix - API\GraphFlix - API.csproj", "{F9003DD9-84BE-4214-9E54-D2499BB7AAF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphFlix - API - Tests", "GraphFlix - API - Tests\GraphFlix - API - Tests.csproj", "{F7548405-D306-4240-9BF4-D658EC71961A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F9003DD9-84BE-4214-9E54-D2499BB7AAF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9003DD9-84BE-4214-9E54-D2499BB7AAF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9003DD9-84BE-4214-9E54-D2499BB7AAF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9003DD9-84BE-4214-9E54-D2499BB7AAF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7548405-D306-4240-9BF4-D658EC71961A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7548405-D306-4240-9BF4-D658EC71961A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7548405-D306-4240-9BF4-D658EC71961A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7548405-D306-4240-9BF4-D658EC71961A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C8DAE5BF-F56D-46BC-BB54-12C914D85123}
+	EndGlobalSection
+EndGlobal
