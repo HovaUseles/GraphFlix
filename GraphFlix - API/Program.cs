@@ -1,5 +1,5 @@
 using GraphFlix.Appsettings;
-using GraphFlix.Data;
+using GraphFlix.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
