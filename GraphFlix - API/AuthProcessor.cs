@@ -2,8 +2,8 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using GraphFlix.Models;
 using System.Diagnostics;
+using GraphFlix.Models.Nodes;
 
 namespace GraphFlix
 {

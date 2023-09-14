@@ -1,4 +1,7 @@
-﻿namespace GraphFlix.Models
+﻿using GraphFlix.Interfaces;
+using GraphFlix.Models.Edges;
+
+namespace GraphFlix.Models.Nodes
 {
     public class User
     {

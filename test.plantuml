@@ -1,3 +1,0 @@
-@startuml test
-test -> test2
-@enduml

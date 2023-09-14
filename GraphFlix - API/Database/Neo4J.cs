@@ -1,4 +1,5 @@
 ﻿using GraphFlix.Appsettings;
+using GraphFlix.Models.Nodes;
 using Microsoft.Extensions.Options;
 using Neo4j.Driver;
 using System.Net.WebSockets;
@@ -13,7 +14,7 @@ namespace GraphFlix.Database
         {
             _driver = GraphDatabase.Driver(appSettings.Value.Uri, AuthTokens.Basic(appSettings.Value.Username, appSettings.Value.Password));
         }
-        public async Task<Dictionary<long, IReadOnlyList<string>>> ExecuteReadAsync(string query)
+        public async Task<List<IRecord>> ExecuteReadAsync(string query)
         {
             using (var session = _driver.AsyncSession())
             {
@@ -22,16 +23,10 @@ namespace GraphFlix.Database
                 var result = await session.ExecuteReadAsync(async reader =>
                 {
                     var cursor = await reader.RunAsync(query);
+
                     return await cursor.ToListAsync();
                 });
-
-                Dictionary<long, IReadOnlyList<string>> nodeLabels = new Dictionary<long, IReadOnlyList<string>>();
-                foreach (var record in result)
-                {
-                    var node = record["n"].As<INode>();
-                    nodeLabels.Add(node.Id, node.Labels);
-                }
-                return nodeLabels;
+                return result;
             }
 
         }

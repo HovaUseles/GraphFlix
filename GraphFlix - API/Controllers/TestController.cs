@@ -1,5 +1,5 @@
 ﻿using GraphFlix.Database;
-using GraphFlix.Models;
+using GraphFlix.Models.Nodes;
 using GraphFlix.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,5 +30,11 @@ namespace GraphFlix.Controllers
         {
             await _movieRepository.CreateMovie(movie);
         }
+        [HttpGet("GetRecommendedV1")]
+        public async Task<Dictionary<long, IReadOnlyDictionary<string, object>>> GetRecommendedMovies([FromQuery] string name)
+        {
+           return await _movieRepository.GetRecommendedMoviesV1(name);
+        }
+
     }
 }

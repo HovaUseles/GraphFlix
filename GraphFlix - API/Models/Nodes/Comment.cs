@@ -1,4 +1,4 @@
-﻿namespace GraphFlix.Models
+﻿namespace GraphFlix.Models.Nodes
 {
     public class Comment
     {
