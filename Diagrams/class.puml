@@ -1,20 +1,251 @@
 @startuml Classdiagram
-class Movie {
+
+class MovieDto {
     +int Id
     +string Title
     +string Description
     +DateTime ReleaseDate
-    +float GetRating()
 }
-class User {
+class UserDto {
     +int Id
     +string Username
-    +string PasswordHash
-    +int Salt
     +bool CookieAccept
-    ~void packagePrivateMethod()
-    #{abstract} char protectedMethod(int param)
+}
+class TokenDto {
+    +string TokenString
+    +int ExpiresIn
 }
 
+class UserController {
+    -UserManager _userManager
+    +ActionResult<List<UserDto>> Get()
+    +ActionResult<UserDto> Get(int id)
+    +ActionResult<UserDto> Create(UserDto dto)
+    +ActionResult<UserDto> Update(UserDto dto)
+    +ActionResult<UserDto> Delete(int id)  
+    +ActionResult<UserDto> GetUserByToken(string tokenString)  
+}
+UserController --> UserDto : Uses
+UserController --> TokenDto : Uses
+UserController o--> UserManager : has
+
+class MovieController {
+    -MovieManager _movieManager
+    +ActionResult<List<MovieDto>> Get()
+    +ActionResult<MovieDto> Get(int id)
+    +ActionResult<MovieDto> Create(MovieDto dto)
+    +ActionResult<MovieDto> Update(MovieDto dto)
+    +ActionResult<MovieDto> Delete(int id)
+    +ActionResult<List<MovieDto>> GetRecommendedMovies(UserDto dto)
+}
+MovieController --> MovieDto : Uses
+MovieController o--> MovieManager : has
+
+class AuthController {
+    -AuthenticationManager _authenticationManager
+    +ActionResult<TokenDto> RequestToken(string username, string password)
+    +ActionResult<bool> ValidateToken(string tokenString)
+    +ActionResult<TokenDto> RefreshToken(string refreshTokenString)
+}
+AuthController --> TokenDto : Uses
+AuthController o--> AuthenticationManager : has
+
+class UserManager {
+    -IUserRepository _userRepo
+    -IHashingService _hashingService
+    +List<UserDto> GetUsers()
+    +UserDto GetUser(int id)
+    +UserDto CreateUser(UserDto user)
+    +UserDto UpdateUser(UserDto userChanges)
+    +UserDto DeleteUser(int id)
+    +UserDto GetByToken(TokenDto token)
+}
+UserManager --> UserDto : has
+UserManager --> TokenDto : has
+UserManager o--> IHashingService : has
+
+class MovieManager {
+    -IMovieRepository _movieRepo
+    -IRecommendationService _recommendService
+    +List<MovieDto> GetMovies()
+    +MovieDto GetMovie(int id)
+    +MovieDto CreateMovie(MovieDto movie)
+    +MovieDto UpdateMovie(MovieDto movieChanges)
+    +MovieDto DeleteMovie(int id)
+    +List<Movie> RecommendedMovies(UserDto user)
+}
+MovieManager --> MovieDto : has
+MovieManager --> UserDto : has
+MovieManager o--> IRecommendationService : has
+
+class AuthenticationManager {
+    -ITokenService _tokenService
+    +Token GetNewToken()
+    +bool ValidateToken(TokenDto token)
+}
+AuthenticationManager o--> ITokenService : has
+AuthenticationManager --> TokenDto : uses
+
+interface "IHashingservice" as IHashingService {
+    +string HashPassword(string password)
+}
+
+class HashingService {
+    +string HashPassword(string password)
+}
+IHashingService <|-- HashingService : implements
+
+interface "IRecommendationService" as IRecommendationService {
+    +List<Movie> GetRecommendedMovies(User user)
+}
+
+class RecommendationService {
+    +List<Movie> GetRecommendedMovies(User user)
+}
+IRecommendationService <|-- RecommendationService : implements
+
+interface "ITokenService" as ITokenService {
+    +Token BuildNewToken()
+}
+
+class TokenService {
+    +Token BuildNewToken()
+}
+TokenService --> Token : uses
+ITokenService <|-- TokenService : implements
+
+
+package DbAccess <<Rectangle>> {
+
+    class Movie {
+        +int Id
+        +string Title
+        +string Description
+        +DateTime ReleaseDate
+        +float GetRating()
+    }
+    Movie "1" o--> "many" GenreEdge
+
+    class User {
+        +int Id
+        +string Username
+        +string PasswordHash
+        +int Salt
+        +bool CookieAccept
+        +ViewedEdge[] ViewedMovies
+    }
+    User "1" o--> "many" ViewedEdge
+    User "many" o--> "1" Role : has
+
+    class Role {
+        +int Id
+        +string Name
+    }
+
+    class Token {
+        +string TokenString
+        +int ExpiresIn
+    }
+
+    class Genre {
+        +int Id
+        +string Name
+    }
+
+    class Person {
+        +int Id
+        +string Name
+    }
+    Person "1" o--> "many" DirectedEdge
+    Person "1" o--> "many" ActedInEdge
+
+    interface "IEdge" as IEdge {
+        +string Edgename
+    }
+    class DirectedEdge {
+        +string Edgename
+        +Movie Movie
+    }
+    IEdge <|-- DirectedEdge : implements
+    DirectedEdge "many" o--> "many" Movie
+
+    class ActedInEdge {
+        +string Edgename
+        +Movie Movie
+    }
+    IEdge <|-- ActedInEdge : implements
+    ActedInEdge "many" o--> "many" Movie
+
+    class ViewedEdge {
+        +string Edgename
+        +Movie Movie
+    }
+    IEdge <|-- ViewedEdge : implements
+    ViewedEdge "many" o--> "many" Movie
+
+    class RecommendedEdge {
+        +string Edgename
+        +Movie Movie
+    }
+    IEdge <|-- RecommendedEdge : implements
+    RecommendedEdge "many" o--> "many" Movie
+
+    class GenreEdge {
+        +string Edgename
+        +Movie Genre
+    }
+    IEdge <|-- GenreEdge : implements
+    GenreEdge "many" o--> "many" Movie
+
+    interface "IUserRepository" as IUserRepository {
+        +List<UserDto> GetAll() 
+        +UserDto GetById(int id)
+        +UserDto Create(UserDto user)
+        +UserDto Update(UserDto userChanges)
+        +UserDto Delete(int id)
+    }
+
+    class Neo4jUserRepository {
+        -IDataHandler _handler
+        +List<UserDto> GetAll() 
+        +UserDto GetById(int id)
+        +UserDto Create(UserDto user)
+        +UserDto Update(UserDto userChanges)
+        +UserDto Delete(int id)
+    }
+    IUserRepository <|-- Neo4jUserRepository : implements
+    Neo4jUserRepository o--> IDataHandler : has
+    Neo4jUserRepository *--> User
+    Neo4jUserRepository --> UserDto
+
+    interface "IMovieRepository" as IMovieRepository {
+        +List<MovieDto> GetAll() 
+        +MovieDto GetById(int id)
+        +MovieDto Create(MovieDto Movie)
+        +MovieDto Update(MovieDto MovieChanges)
+        +MovieDto Delete(int id)
+        +List<MovieDto> RecommendedMovies(UserDto user)
+    }
+
+    class Neo4jMovieRepository {
+        -IDataHandler _handler
+        +List<MovieDto> GetAll() 
+        +MovieDto GetById(int id)
+        +MovieDto Create(MovieDto Movie)
+        +MovieDto Update(MovieDto MovieChanges)
+        +MovieDto Delete(int id)
+        +List<MovieDto> RecommendedMovies(UserDto user)
+    }
+    IMovieRepository <|-- Neo4jMovieRepository : implements
+    Neo4jMovieRepository o--> IDataHandler : has
+    Neo4jMovieRepository *--> Movie
+    Neo4jMovieRepository --> MovieDto
+
+    interface "IDataHandler" as IDataHandler {
+        +ExecuteQueryReadAsync(string query)
+        +ExecuteQueryWriteAsync(string query)
+    }
+
+}
 
 @enduml
