@@ -28,7 +28,7 @@ namespace GraphFlix.Controllers
         [HttpPost("CreateMovie")]
         public async Task Create([FromBody] Movie movie)
         {
-            return await _movieRepository.CreateMovie(movie);
+            await _movieRepository.CreateMovie(movie);
         }
     }
 }
