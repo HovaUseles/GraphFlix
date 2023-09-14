@@ -1,5 +1,6 @@
 using GraphFlix.Appsettings;
 using GraphFlix.Database;
+using GraphFlix.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,8 @@ builder.Services.Configure<Neo4JSettings>(builder.Configuration.GetSection("Neo4
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<INeo4J, Neo4J>();
+builder.Services.AddScoped<INeo4J, Neo4J>();
+builder.Services.AddScoped<MovieRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
