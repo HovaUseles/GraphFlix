@@ -1,0 +1,20 @@
+@startuml Classdiagram
+class Movie {
+    +int Id
+    +string Title
+    +string Description
+    +DateTime ReleaseDate
+    +float GetRating()
+}
+class User {
+    +int Id
+    +string Username
+    +string PasswordHash
+    +int Salt
+    +bool CookieAccept
+    ~void packagePrivateMethod()
+    #{abstract} char protectedMethod(int param)
+}
+
+
+@enduml
