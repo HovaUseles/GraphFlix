@@ -1,4 +1,6 @@
 ﻿using GraphFlix.Database;
+using GraphFlix.Models;
+using GraphFlix.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,21 +10,25 @@ namespace GraphFlix.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        private readonly Neo4J neo;
-        public TestController(Neo4J neo4J)
+        private readonly MovieRepository _movieRepository;
+        public TestController(MovieRepository repository)
         {
-            neo = neo4J;
+            _movieRepository = repository;
         }
         [HttpGet("Test")]
         public async Task<Dictionary<long,IReadOnlyList<string>>> TestAsync()
         {
-            var testdata = await neo.ExecuteReadAsync("MATCH (n) RETURN n LIMIT 10");
-            return testdata;
+            return await _movieRepository.GetNodesAsync();
+        }
+        [HttpGet("GetMovies")]
+        public async Task<Dictionary<long, IReadOnlyList<string>>> GetMovies()
+        {
+            return await _movieRepository.GetMoviesAsync();
         }
         [HttpPost("CreateMovie")]
-        public async Task Create()
+        public async Task Create([FromBody] Movie movie)
         {
-
+            return await _movieRepository.CreateMovie(movie);
         }
     }
 }

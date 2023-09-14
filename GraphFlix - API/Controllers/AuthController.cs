@@ -4,5 +4,6 @@ namespace GraphFlix.Controllers
 {
     public class AuthController : Controller
     {
+
     }
 }
