@@ -63,6 +63,7 @@ class UserManager {
 UserManager --> UserDto : has
 UserManager --> TokenDto : has
 UserManager o--> IHashingService : has
+UserManager o--> IUserRepository : has
 
 class MovieManager {
     -IMovieRepository _movieRepo
@@ -77,6 +78,7 @@ class MovieManager {
 MovieManager --> MovieDto : has
 MovieManager --> UserDto : has
 MovieManager o--> IRecommendationService : has
+MovieManager o--> IMovieRepository : has
 
 class AuthenticationManager {
     -ITokenService _tokenService
@@ -93,7 +95,7 @@ interface "IHashingservice" as IHashingService {
 class HashingService {
     +string HashPassword(string password)
 }
-IHashingService <|-- HashingService : implements
+IHashingService <|.. HashingService : implements
 
 interface "IRecommendationService" as IRecommendationService {
     +List<Movie> GetRecommendedMovies(User user)
@@ -102,7 +104,7 @@ interface "IRecommendationService" as IRecommendationService {
 class RecommendationService {
     +List<Movie> GetRecommendedMovies(User user)
 }
-IRecommendationService <|-- RecommendationService : implements
+IRecommendationService <|.. RecommendationService : implements
 
 interface "ITokenService" as ITokenService {
     +Token BuildNewToken()
@@ -112,140 +114,135 @@ class TokenService {
     +Token BuildNewToken()
 }
 TokenService --> Token : uses
-ITokenService <|-- TokenService : implements
+ITokenService <|.. TokenService : implements
 
+class Movie {
+    +int Id
+    +string Title
+    +string Description
+    +DateTime ReleaseDate
+    +float GetRating()
+}
+Movie "1" o--> "many" GenreEdge
 
-package DbAccess <<Rectangle>> {
+class User {
+    +int Id
+    +string Username
+    +string PasswordHash
+    +int Salt
+    +bool CookieAccept
+    +ViewedEdge[] ViewedMovies
+}
+User "1" o--> "many" ViewedEdge
+User "many" o--> "1" Role : has
 
-    class Movie {
-        +int Id
-        +string Title
-        +string Description
-        +DateTime ReleaseDate
-        +float GetRating()
-    }
-    Movie "1" o--> "many" GenreEdge
+class Role {
+    +int Id
+    +string Name
+}
 
-    class User {
-        +int Id
-        +string Username
-        +string PasswordHash
-        +int Salt
-        +bool CookieAccept
-        +ViewedEdge[] ViewedMovies
-    }
-    User "1" o--> "many" ViewedEdge
-    User "many" o--> "1" Role : has
+class Token {
+    +string TokenString
+    +int ExpiresIn
+}
 
-    class Role {
-        +int Id
-        +string Name
-    }
+class Genre {
+    +int Id
+    +string Name
+}
 
-    class Token {
-        +string TokenString
-        +int ExpiresIn
-    }
+class Person {
+    +int Id
+    +string Name
+}
+Person "1" o--> "many" DirectedEdge
+Person "1" o--> "many" ActedInEdge
 
-    class Genre {
-        +int Id
-        +string Name
-    }
+interface "IEdge" as IEdge {
+    +string Edgename
+}
+class DirectedEdge {
+    +string Edgename
+    +Movie Movie
+}
+IEdge <|.. DirectedEdge : implements
+DirectedEdge "many" o--> "many" Movie
 
-    class Person {
-        +int Id
-        +string Name
-    }
-    Person "1" o--> "many" DirectedEdge
-    Person "1" o--> "many" ActedInEdge
+class ActedInEdge {
+    +string Edgename
+    +Movie Movie
+}
+IEdge <|.. ActedInEdge : implements
+ActedInEdge "many" o--> "many" Movie
 
-    interface "IEdge" as IEdge {
-        +string Edgename
-    }
-    class DirectedEdge {
-        +string Edgename
-        +Movie Movie
-    }
-    IEdge <|-- DirectedEdge : implements
-    DirectedEdge "many" o--> "many" Movie
+class ViewedEdge {
+    +string Edgename
+    +Movie Movie
+}
+IEdge <|.. ViewedEdge : implements
+ViewedEdge "many" o--> "many" Movie
 
-    class ActedInEdge {
-        +string Edgename
-        +Movie Movie
-    }
-    IEdge <|-- ActedInEdge : implements
-    ActedInEdge "many" o--> "many" Movie
+class RecommendedEdge {
+    +string Edgename
+    +Movie Movie
+}
+IEdge <|.. RecommendedEdge : implements
+RecommendedEdge "many" o--> "many" Movie
 
-    class ViewedEdge {
-        +string Edgename
-        +Movie Movie
-    }
-    IEdge <|-- ViewedEdge : implements
-    ViewedEdge "many" o--> "many" Movie
+class GenreEdge {
+    +string Edgename
+    +Movie Genre
+}
+IEdge <|.. GenreEdge : implements
+GenreEdge "many" o--> "many" Movie
 
-    class RecommendedEdge {
-        +string Edgename
-        +Movie Movie
-    }
-    IEdge <|-- RecommendedEdge : implements
-    RecommendedEdge "many" o--> "many" Movie
+interface "IUserRepository" as IUserRepository {
+    +List<UserDto> GetAll() 
+    +UserDto GetById(int id)
+    +UserDto Create(UserDto user)
+    +UserDto Update(UserDto userChanges)
+    +UserDto Delete(int id)
+}
 
-    class GenreEdge {
-        +string Edgename
-        +Movie Genre
-    }
-    IEdge <|-- GenreEdge : implements
-    GenreEdge "many" o--> "many" Movie
+class Neo4jUserRepository {
+    -IDataHandler _handler
+    +List<UserDto> GetAll() 
+    +UserDto GetById(int id)
+    +UserDto Create(UserDto user)
+    +UserDto Update(UserDto userChanges)
+    +UserDto Delete(int id)
+}
+IUserRepository <|.. Neo4jUserRepository : implements
+Neo4jUserRepository o--> IDataHandler : has
+Neo4jUserRepository *--> User
+Neo4jUserRepository --> UserDto
 
-    interface "IUserRepository" as IUserRepository {
-        +List<UserDto> GetAll() 
-        +UserDto GetById(int id)
-        +UserDto Create(UserDto user)
-        +UserDto Update(UserDto userChanges)
-        +UserDto Delete(int id)
-    }
+interface "IMovieRepository" as IMovieRepository {
+    +List<MovieDto> GetAll() 
+    +MovieDto GetById(int id)
+    +MovieDto Create(MovieDto Movie)
+    +MovieDto Update(MovieDto MovieChanges)
+    +MovieDto Delete(int id)
+    +List<MovieDto> RecommendedMovies(UserDto user)
+}
 
-    class Neo4jUserRepository {
-        -IDataHandler _handler
-        +List<UserDto> GetAll() 
-        +UserDto GetById(int id)
-        +UserDto Create(UserDto user)
-        +UserDto Update(UserDto userChanges)
-        +UserDto Delete(int id)
-    }
-    IUserRepository <|-- Neo4jUserRepository : implements
-    Neo4jUserRepository o--> IDataHandler : has
-    Neo4jUserRepository *--> User
-    Neo4jUserRepository --> UserDto
+class Neo4jMovieRepository {
+    -IDataHandler _handler
+    +List<MovieDto> GetAll() 
+    +MovieDto GetById(int id)
+    +MovieDto Create(MovieDto Movie)
+    +MovieDto Update(MovieDto MovieChanges)
+    +MovieDto Delete(int id)
+    +List<MovieDto> RecommendedMovies(UserDto user)
+}
+IMovieRepository <|.. Neo4jMovieRepository : implements
+Neo4jMovieRepository o--> IDataHandler : has
+Neo4jMovieRepository *--> Movie
+Neo4jMovieRepository --> MovieDto
 
-    interface "IMovieRepository" as IMovieRepository {
-        +List<MovieDto> GetAll() 
-        +MovieDto GetById(int id)
-        +MovieDto Create(MovieDto Movie)
-        +MovieDto Update(MovieDto MovieChanges)
-        +MovieDto Delete(int id)
-        +List<MovieDto> RecommendedMovies(UserDto user)
-    }
-
-    class Neo4jMovieRepository {
-        -IDataHandler _handler
-        +List<MovieDto> GetAll() 
-        +MovieDto GetById(int id)
-        +MovieDto Create(MovieDto Movie)
-        +MovieDto Update(MovieDto MovieChanges)
-        +MovieDto Delete(int id)
-        +List<MovieDto> RecommendedMovies(UserDto user)
-    }
-    IMovieRepository <|-- Neo4jMovieRepository : implements
-    Neo4jMovieRepository o--> IDataHandler : has
-    Neo4jMovieRepository *--> Movie
-    Neo4jMovieRepository --> MovieDto
-
-    interface "IDataHandler" as IDataHandler {
-        +ExecuteQueryReadAsync(string query)
-        +ExecuteQueryWriteAsync(string query)
-    }
-
+interface "IDataHandler" as IDataHandler {
+    +ExecuteQueryReadAsync(string query)
+    +ExecuteQueryWriteAsync(string query)
 }
 
 @enduml
