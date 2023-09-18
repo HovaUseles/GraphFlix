@@ -77,7 +77,6 @@ class MovieManager {
 }
 MovieManager --> MovieDto : has
 MovieManager --> UserDto : has
-MovieManager o--> IRecommendationService : has
 MovieManager o--> IMovieRepository : has
 
 class AuthenticationManager {
@@ -96,15 +95,6 @@ class HashingService {
     +string HashPassword(string password)
 }
 IHashingService <|.. HashingService : implements
-
-interface "IRecommendationService" as IRecommendationService {
-    +List<Movie> GetRecommendedMovies(User user)
-}
-
-class RecommendationService {
-    +List<Movie> GetRecommendedMovies(User user)
-}
-IRecommendationService <|.. RecommendationService : implements
 
 interface "ITokenService" as ITokenService {
     +Token BuildNewToken()
@@ -223,7 +213,7 @@ interface "IMovieRepository" as IMovieRepository {
     +MovieDto Create(MovieDto Movie)
     +MovieDto Update(MovieDto MovieChanges)
     +MovieDto Delete(int id)
-    +List<MovieDto> RecommendedMovies(UserDto user)
+    +List<MovieDto> RecommendedMovies(string userId)
 }
 
 class Neo4jMovieRepository {

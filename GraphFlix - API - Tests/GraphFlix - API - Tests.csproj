@@ -24,4 +24,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GraphFlix - API\GraphFlix - API.csproj" />
+  </ItemGroup>
+
 </Project>
