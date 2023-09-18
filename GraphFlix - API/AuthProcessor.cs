@@ -10,10 +10,10 @@ namespace GraphFlix
     public class AuthProcessor
     {
         private const string _jwtPublicKey = "TestCertificateAndJwtKomNuForHelvedeHvorMangeTegnSkalDerTil"; // Move to appsettings or environment variable
-        private const string _url = "https://localhost:27016";
-        private const int _tokenValidity = 60; // Minutes
+        private const string _url = "https://localhost:27016"; // Move to appsettings or environment variable
+		private const int _tokenValidity = 60; // Minutes
 
-        public Token Generate()
+        public static Token Generate()
         {
             byte[] tokenKey = GetTokenKey();
             DateTime tokenExpiresTime = SetTokenExpiry();
@@ -21,7 +21,7 @@ namespace GraphFlix
             return AssignTokenProperties(securityTokenDescriptor, tokenExpiresTime);
         }
 
-        private byte[] GetTokenKey()
+        private static byte[] GetTokenKey()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace GraphFlix
             }
         }
 
-        private DateTime SetTokenExpiry()
+		private static DateTime SetTokenExpiry()
         {
             try
             {
@@ -47,7 +47,7 @@ namespace GraphFlix
             }
         }
 
-        private SecurityTokenDescriptor GetDescriptor(List<Claim> claims, DateTime tokenExpiresTime, byte[] tokenKey)
+		private static SecurityTokenDescriptor GetDescriptor(List<Claim> claims, DateTime tokenExpiresTime, byte[] tokenKey)
         {
             return new SecurityTokenDescriptor
             {
@@ -59,13 +59,13 @@ namespace GraphFlix
             };
         }
 
-        private List<Claim> GetRoleClaim()
+		private static List<Claim> GetRoleClaim()
         {
             // Get role from db instead
             return new List<Claim> { new Claim(ClaimTypes.Role, "User") };
         }
 
-        private Token AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
+		private static Token AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
         {
             Token newToken = new Token();
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();

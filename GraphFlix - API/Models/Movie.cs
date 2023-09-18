@@ -5,6 +5,6 @@
         public string Id { get; }
         public string Title { get; set; }
         public DateOnly ReleaseDate { get; set; }
-        public Genre Genre { get; set; }
+        public List<Genre> GenreList { get; set; }
     }
 }
