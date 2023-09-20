@@ -16,12 +16,12 @@ namespace GraphFlix.Controllers
             _movieRepository = repository;
         }
         [HttpGet("Test")]
-        public async Task<Dictionary<long,IReadOnlyList<string>>> TestAsync()
+        public async Task TestAsync()
         {
-            return await _movieRepository.GetNodesAsync();
+            await _movieRepository.GetNodesAsync();
         }
         [HttpGet("GetMovies")]
-        public async Task<Dictionary<long, IReadOnlyList<string>>> GetMovies()
+        public async Task<List<Movie>> GetMovies()
         {
             return await _movieRepository.GetMoviesAsync();
         }
