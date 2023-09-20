@@ -68,7 +68,7 @@ namespace GraphFlix___API___Tests
             {
                 // Arrange
                 UserDto sampleUser = SampleData().ElementAt(1);
-                sampleUser.UserName = "Keanu Reeves";
+                sampleUser.Username = "Keanu Reeves";
 
                 mock.Mock<IUserRepository>()
                     .Setup(repo => repo.Update(sampleUser))
