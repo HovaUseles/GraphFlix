@@ -1,18 +1,4 @@
-﻿using Autofac.Extras.Moq;
-using GraphFlix.Controllers;
-using GraphFlix.DTOs;
-using GraphFlix.Managers;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-
-namespace GraphFlix___API___Tests
+﻿namespace GraphFlix___API___Tests
 {
     public class UserControllerTests
     {

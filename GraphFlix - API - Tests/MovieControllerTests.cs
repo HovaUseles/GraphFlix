@@ -1,25 +1,9 @@
-﻿using Autofac.Extras.Moq;
-using GraphFlix.Controllers;
-using GraphFlix.DTOs;
-using GraphFlix.Managers;
-using GraphFlix.Models;
-using GraphFlix.Repositories;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-
-namespace GraphFlix___API___Tests
+﻿namespace GraphFlix___API___Tests
 {
     public class MovieControllerTests
     {
+        List<Genre> genres = new List<Genre> { new Genre { Id = "1", Name = "Action" }, new Genre { Id = "2", Name = "Drama" } };
+
         [Fact]
         public async Task Get_ShouldReturnMovies()
         {
@@ -104,8 +88,8 @@ namespace GraphFlix___API___Tests
             // Arrange
             using (var mock = AutoMock.GetLoose())
             {
-                MovieDto sampleDto = new MovieDto("The Matrix", DateOnly.Parse("2010-01-01"), new List<Genre> { new Genre { Id = "1", Name = "Action" }, new Genre { Id = "2", Name = "Drama" } });
-                MovieDto sampleDtoWithId = new MovieDto("The Matrix", DateOnly.Parse("2010-01-01"), new List<Genre> { new Genre { Id = "1", Name = "Action" }, new Genre { Id = "2", Name = "Drama" } }) { Id = "99"};
+                MovieDto sampleDto = new MovieDto("The Matrix", DateOnly.Parse("2010-01-01"), genres);
+                MovieDto sampleDtoWithId = new MovieDto("The Matrix", DateOnly.Parse("2010-01-01"), genres) { Id = "99"};
                 mock.Mock<IMovieManager>()
                     .Setup(mm => mm.CreateMovie(sampleDto))
                     .ReturnsAsync(sampleDtoWithId);
@@ -156,8 +140,6 @@ namespace GraphFlix___API___Tests
 
         private async Task<IEnumerable<MovieDto>> SampleData()
         {
-            List<Genre> genres = new List<Genre> { new Genre { Id = "1", Name = "Action" }, new Genre { Id = "2", Name = "Drama" } };
-
             List<MovieDto> samples = new List<MovieDto>()
             {
                 new MovieDto("Inception", DateOnly.Parse("2010-01-01"), genres) { Id = "1" },
