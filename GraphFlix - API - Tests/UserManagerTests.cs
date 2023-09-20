@@ -1,16 +1,4 @@
-﻿using Autofac.Extras.Moq;
-using GraphFlix.DTOs;
-using GraphFlix.Managers;
-using GraphFlix.Repositories;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-
-namespace GraphFlix___API___Tests
+﻿namespace GraphFlix___API___Tests
 {
     public class UserManagerTests
     {
