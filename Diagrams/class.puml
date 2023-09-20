@@ -17,7 +17,7 @@ class TokenDto {
 }
 
 class UserController {
-    -UserManager _userManager
+    -IUserManager _userManager
     +ActionResult<List<UserDto>> Get()
     +ActionResult<UserDto> Get(int id)
     +ActionResult<UserDto> Create(UserDto dto)
@@ -27,10 +27,10 @@ class UserController {
 }
 UserController --> UserDto : Uses
 UserController --> TokenDto : Uses
-UserController o--> UserManager : has
+UserController o--> IUserManager : has
 
 class MovieController {
-    -MovieManager _movieManager
+    -IMovieManager _movieManager
     +ActionResult<List<MovieDto>> Get()
     +ActionResult<MovieDto> Get(int id)
     +ActionResult<MovieDto> Create(MovieDto dto)
@@ -39,7 +39,7 @@ class MovieController {
     +ActionResult<List<MovieDto>> GetRecommendedMovies(UserDto dto)
 }
 MovieController --> MovieDto : Uses
-MovieController o--> MovieManager : has
+MovieController o--> IMovieManager : has
 
 class AuthController {
     -AuthenticationManager _authenticationManager
@@ -49,6 +49,15 @@ class AuthController {
 }
 AuthController --> TokenDto : Uses
 AuthController o--> AuthenticationManager : has
+
+interface "IUserManager" as IUserManager {
+    +List<UserDto> GetUsers()
+    +UserDto GetUser(int id)
+    +UserDto CreateUser(UserDto user)
+    +UserDto UpdateUser(UserDto userChanges)
+    +UserDto DeleteUser(int id)
+    +UserDto GetByToken(TokenDto token)
+}
 
 class UserManager {
     -IUserRepository _userRepo
@@ -60,14 +69,13 @@ class UserManager {
     +UserDto DeleteUser(int id)
     +UserDto GetByToken(TokenDto token)
 }
+IUserManager <|.. UserManager : Implements
 UserManager --> UserDto : has
 UserManager --> TokenDto : has
 UserManager o--> IHashingService : has
 UserManager o--> IUserRepository : has
 
-class MovieManager {
-    -IMovieRepository _movieRepo
-    -IRecommendationService _recommendService
+Interface "IMovieManager" as IMovieManager {
     +List<MovieDto> GetMovies()
     +MovieDto GetMovie(int id)
     +MovieDto CreateMovie(MovieDto movie)
@@ -75,6 +83,17 @@ class MovieManager {
     +MovieDto DeleteMovie(int id)
     +List<Movie> RecommendedMovies(UserDto user)
 }
+
+class MovieManager {
+    -IMovieRepository _movieRepo
+    +List<MovieDto> GetMovies()
+    +MovieDto GetMovie(int id)
+    +MovieDto CreateMovie(MovieDto movie)
+    +MovieDto UpdateMovie(MovieDto movieChanges)
+    +MovieDto DeleteMovie(int id)
+    +List<Movie> RecommendedMovies(UserDto user)
+}
+IMovieManager <|.. MovieManager : implements
 MovieManager --> MovieDto : has
 MovieManager --> UserDto : has
 MovieManager o--> IMovieRepository : has

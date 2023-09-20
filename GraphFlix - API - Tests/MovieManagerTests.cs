@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GraphFlix___API___Tests
@@ -31,18 +32,12 @@ namespace GraphFlix___API___Tests
 
                 // Act
                 var result = await manager.GetMovies();
-                var expected = SampleData();
+                string actualJson = JsonSerializer.Serialize(result);
+                string expectedJson = JsonSerializer.Serialize(SampleData());
 
 				// Assert
                 Assert.True(result != null);
-                Assert.Equal(expected.Count(), result.Count());
-                for (int i = 0; i < result.Count(); i++)
-                {
-                    Assert.Equal(expected.ElementAt(i).Id, result.ElementAt(i).Id);
-                    Assert.Equal(expected.ElementAt(i).Title, result.ElementAt(i).Title);
-                    Assert.Equal(expected.ElementAt(i).Description, result.ElementAt(i).Description);
-                    Assert.Equal(expected.ElementAt(i).ReleaseDate, result.ElementAt(i).ReleaseDate);
-                }
+                Assert.Equal(expectedJson, actualJson);
 			}
 		}
         

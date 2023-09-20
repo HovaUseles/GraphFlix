@@ -4,66 +4,68 @@ using GraphFlix.DTOs;
 using GraphFlix.Managers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GraphFlix___API___Tests
 {
-    internal class UserControllerTests
+    public class UserControllerTests
     {
         [Fact]
-        public async Task Get_ShouldReturnMovies()
+        public async Task Get_ShouldReturnUsers()
         {
             // Arrange
             using (var mock = AutoMock.GetLoose())
             {
-                mock.Mock<IMovieManager>()
-                    .Setup(mm => mm.GetMovies())
+                mock.Mock<IUserManager>()
+                    .Setup(mm => mm.GetUsers())
                     .ReturnsAsync(await SampleData());
 
-                var controller = mock.Create<MovieController>();
+                var controller = mock.Create<UserController>();
 
                 // Act
                 var result = await controller.Get();
-                var listOfMovies = (result.Result as ObjectResult).Value;
+                var listOfUsers = (result.Result as ObjectResult).Value;
                 IEnumerable<UserDto> sampleDtos = await SampleData();
 
-                string actualMoviesJson = JsonSerializer.Serialize(listOfMovies);
-                string expectedMoviesJson = JsonSerializer.Serialize(sampleDtos);
+                string actualUsersJson = JsonSerializer.Serialize(listOfUsers);
+                string expectedUsersJson = JsonSerializer.Serialize(sampleDtos);
 
                 // Assert
                 Assert.True(result != null); // Null check
-                Assert.Equal(expectedMoviesJson, actualMoviesJson);
+                Assert.Equal(expectedUsersJson, actualUsersJson);
             }
         }
 
         [Fact]
-        public async Task GetById_ShouldReturnMovie()
+        public async Task GetById_ShouldReturnUser()
         {
             // Arrange
             using (var mock = AutoMock.GetLoose())
             {
                 var sampleData = await SampleData();
-                UserDto sampleMovie = sampleData.ElementAt(1);
-                mock.Mock<IMovieManager>()
-                    .Setup(mm => mm.GetMovie(sampleMovie.Id))
-                    .ReturnsAsync(sampleMovie);
+                UserDto sampleUser = sampleData.ElementAt(1);
+                mock.Mock<IUserManager>()
+                    .Setup(mm => mm.GetUser(sampleUser.Id))
+                    .ReturnsAsync(sampleUser);
 
-                var controller = mock.Create<MovieController>();
+                var controller = mock.Create<UserController>();
 
                 // Act
-                var result = await controller.Get(sampleMovie.Id);
-                var returnedMovie = (result.Result as ObjectResult).Value;
+                var result = await controller.Get(sampleUser.Id);
+                var returnedUser = (result.Result as ObjectResult).Value;
 
-                string actualMovieJson = JsonSerializer.Serialize(returnedMovie);
-                string expectedMovieJson = JsonSerializer.Serialize(sampleMovie);
+                string actualUserJson = JsonSerializer.Serialize(returnedUser);
+                string expectedUserJson = JsonSerializer.Serialize(sampleUser);
 
                 // Assert
                 Assert.True(result != null); // Null check
-                Assert.Equal(expectedMovieJson, actualMovieJson);
+                Assert.Equal(expectedUserJson, actualUserJson);
             }
         }
 
@@ -77,11 +79,11 @@ namespace GraphFlix___API___Tests
             {
                 UserDto? UserDto = null;
 
-                mock.Mock<IMovieManager>()
-                    .Setup(mm => mm.GetMovie(emptyId))
+                mock.Mock<IUserManager>()
+                    .Setup(mm => mm.GetUser(emptyId))
                     .ReturnsAsync(UserDto);
 
-                var controller = mock.Create<MovieController>();
+                var controller = mock.Create<UserController>();
 
                 // Act
                 var result = await controller.Get(emptyId);
@@ -98,13 +100,13 @@ namespace GraphFlix___API___Tests
             // Arrange
             using (var mock = AutoMock.GetLoose())
             {
-                UserDto sampleDto = new UserDto("The Matrix", "The Matrix Description", DateOnly.Parse("2010-01-01"));
-                UserDto sampleDtoWithId = new UserDto("The Matrix", "The Matrix Description", DateOnly.Parse("2010-01-01")) { Id = "99" };
-                mock.Mock<IMovieManager>()
-                    .Setup(mm => mm.CreateMovie(sampleDto))
+                UserDto sampleDto = new UserDto("Keanu Reeves");
+                UserDto sampleDtoWithId = new UserDto("Keanu Reeves") { Id = "99" };
+                mock.Mock<IUserManager>()
+                    .Setup(mm => mm.CreateUser(sampleDto))
                     .ReturnsAsync(sampleDtoWithId);
 
-                var controller = mock.Create<MovieController>();
+                var controller = mock.Create<UserController>();
 
                 // Act
                 var result = await controller.Post(sampleDto);
@@ -127,20 +129,19 @@ namespace GraphFlix___API___Tests
             using (var mock = AutoMock.GetLoose())
             {
                 var sampleData = await SampleData();
-                UserDto sampleMovie = sampleData.ElementAt(1);
-                DateOnly dateChange = DateOnly.Parse("2012-01-01");
-                sampleMovie.ReleaseDate = dateChange;
-                mock.Mock<IMovieManager>()
-                    .Setup(mm => mm.UpdateMovie(sampleMovie))
-                    .ReturnsAsync(sampleMovie);
+                UserDto sampleUser = sampleData.ElementAt(1);
+                sampleUser.UserName = "Keanu Reeves";
+                mock.Mock<IUserManager>()
+                    .Setup(mm => mm.UpdateUser(sampleUser))
+                    .ReturnsAsync(sampleUser);
 
-                var controller = mock.Create<MovieController>();
+                var controller = mock.Create<UserController>();
 
                 // Act
-                var result = await controller.Put(sampleMovie.Id, sampleMovie);
+                var result = await controller.Put(sampleUser.Id, sampleUser);
                 var updatedObject = ((ObjectResult)result.Result).Value as UserDto;
                 string resultJson = JsonSerializer.Serialize(updatedObject);
-                string expectedJson = JsonSerializer.Serialize(sampleMovie);
+                string expectedJson = JsonSerializer.Serialize(sampleUser);
 
                 // Assert
                 Assert.True(updatedObject != null); // Null check
