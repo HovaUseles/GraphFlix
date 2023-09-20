@@ -129,7 +129,6 @@ public class Query : IQuery
         _queryString.Append("WHERE ");
         _queryString.Append(condition);
     }
-
     public void AddReturn<T>(T model)
     {
         _queryString.Append("RETURN ");
