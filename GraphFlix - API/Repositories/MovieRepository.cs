@@ -1,10 +1,12 @@
 ﻿using GraphFlix.Database;
+using GraphFlix.DTOs;
 using GraphFlix.Helper;
 using GraphFlix.Models;
+using Neo4jCipher;
 
 namespace GraphFlix.Repositories;
 
-public class MovieRepository //Create Interface
+public class MovieRepository : IMovieRepository
 {
     private readonly INeo4J neo;
     public MovieRepository(INeo4J neo4J)
@@ -15,20 +17,23 @@ public class MovieRepository //Create Interface
     /// Gets all nodes
     /// Used for testing
     /// </summary>
-    public async Task<Dictionary<long, IReadOnlyList<string>>> GetNodesAsync()
+    public async Task GetNodesAsync()
     {
-        var testdata = await neo.ExecuteReadAsync("MATCH (n) RETURN n");
-        return testdata;
+        IBuilder builder = new QueryBuilder();
+        IQuery query = builder.Match("n").Return<string>("n").Build();
+        var result = await neo.ExecuteReadAsync(query.ToString());
+        //return testdata;
     }
     /// <summary>
-    /// 
+    /// Gets all movies and 
     /// </summary>
     /// <returns></returns>
-    public async Task<Dictionary<long, IReadOnlyList<string>>> GetMoviesAsync()
+    public async Task<List<Movie>> GetMoviesAsync()
     {
-        var movies = await neo.ExecuteReadAsync("MATCH (movie:Movie) RETURN movie");
-        //TODO: Convert to models
-        return movies;
+        IBuilder builder = new QueryBuilder();
+        IQuery query = builder.Match("movie:Movie").Return<List<Movie>>("movie").Build();
+        var result =  await neo.ExecuteReadAsync<Movie>(query);
+        return result;
     }
 
     /// <summary>
@@ -37,7 +42,9 @@ public class MovieRepository //Create Interface
     /// <returns></returns>
     public async Task CreateMovie(Movie movie)
     {
-        string query = $"CREATE (:Movie {{title: '{movie.Title}'}})";
+        IBuilder builder = new QueryBuilder();
+
+        IQuery query = builder.Create(movie).Build();
         try
         {
             await neo.ExecuteCreateAsync(query);
@@ -47,5 +54,35 @@ public class MovieRepository //Create Interface
             Log.Logger.Error("Unknow exception | Message: {0}", e.Message);
             //TODO: Handle exception
         }
+    }
+
+    public Task<IEnumerable<MovieDto>> GetAll()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<MovieDto?> GetById(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<MovieDto> Create(MovieDto movie)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<MovieDto> Update(MovieDto movieChanges)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<MovieDto> Delete(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<MovieDto>> GetRecommendedMovies(string userId)
+    {
+        throw new NotImplementedException();
     }
 }
