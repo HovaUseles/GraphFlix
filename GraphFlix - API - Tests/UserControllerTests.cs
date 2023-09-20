@@ -130,7 +130,7 @@ namespace GraphFlix___API___Tests
             {
                 var sampleData = await SampleData();
                 UserDto sampleUser = sampleData.ElementAt(1);
-                sampleUser.UserName = "Keanu Reeves";
+                sampleUser.Username = "Keanu Reeves";
                 mock.Mock<IUserManager>()
                     .Setup(mm => mm.UpdateUser(sampleUser))
                     .ReturnsAsync(sampleUser);

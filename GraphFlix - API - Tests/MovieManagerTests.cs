@@ -2,6 +2,7 @@
 using GraphFlix.Controllers;
 using GraphFlix.DTOs;
 using GraphFlix.Managers;
+using GraphFlix.Models;
 using GraphFlix.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -92,13 +93,15 @@ namespace GraphFlix___API___Tests
 
         private IEnumerable<MovieDto> SampleData()
         {
+            List<Genre> genres = new List<Genre> { new Genre { Id = "1", Name = "Action" }, new Genre { Id = "2", Name = "Drama" } };
+
             List<MovieDto> samples = new List<MovieDto>()
             {
-                new MovieDto("Inception", "Description1", DateOnly.Parse("2010-01-01")) { Id = "1" },
-                new MovieDto("Fight club", "Description2", DateOnly.Parse("2010-01-01")) { Id = "2" },
-                new MovieDto("Da vinci Code", "Description3", DateOnly.Parse("2010-01-01")) { Id = "3" },
-                new MovieDto("The Shawshank Redemption", "Description4", DateOnly.Parse("2010-01-01")) { Id = "4" },
-                new MovieDto("The Godfather", "Description5", DateOnly.Parse("2010-01-01")) { Id = "5" }
+                new MovieDto("Inception", DateOnly.Parse("2010-01-01"), genres) { Id = "1" },
+                new MovieDto("Fight club", DateOnly.Parse("2010-01-01"), genres) { Id = "2" },
+                new MovieDto("Da vinci Code", DateOnly.Parse("2010-01-01"), genres) { Id = "3" },
+                new MovieDto("The Shawshank Redemption", DateOnly.Parse("2010-01-01"), genres) { Id = "4" },
+                new MovieDto("The Godfather", DateOnly.Parse("2010-01-01"), genres) { Id = "5" }
             };
             return samples;
         }
