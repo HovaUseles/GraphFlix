@@ -6,8 +6,8 @@ namespace GraphFlix.Repositories;
 
 public class MovieRepository //Create Interface
 {
-    private readonly Neo4J neo;
-    public MovieRepository(Neo4J neo4J)
+    private readonly INeo4J neo;
+    public MovieRepository(INeo4J neo4J)
     {
         neo = neo4J;
     }

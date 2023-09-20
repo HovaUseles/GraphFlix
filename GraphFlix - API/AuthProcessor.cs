@@ -10,7 +10,7 @@ namespace GraphFlix
     public class AuthProcessor
     {
         private const string _jwtPublicKey = "TestCertificateAndJwtKomNuForHelvedeHvorMangeTegnSkalDerTil"; // Move to appsettings or environment variable
-        private const string _url = "https://localhost:27016"; // Move to appsettings or environment variable
+        private const string _url = "https://localhost:7172"; // Move to appsettings or environment variable
 		private const int _tokenValidity = 60; // Minutes
 
         public static Token Generate()
@@ -25,7 +25,7 @@ namespace GraphFlix
         {
             try
             {
-                return Encoding.ASCII.GetBytes(_jwtPublicKey);
+                return Encoding.UTF8.GetBytes(_jwtPublicKey);
             }
             catch (Exception ex)
             {
@@ -62,7 +62,7 @@ namespace GraphFlix
 		private static List<Claim> GetRoleClaim()
         {
             // Get role from db instead
-            return new List<Claim> { new Claim(ClaimTypes.Role, "User") };
+            return new List<Claim> { new Claim(ClaimTypes.Role, "Admin") };
         }
 
 		private static Token AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)

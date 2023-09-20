@@ -1,7 +1,6 @@
 ﻿using GraphFlix.Appsettings;
 using Microsoft.Extensions.Options;
 using Neo4j.Driver;
-using System.Net.WebSockets;
 
 namespace GraphFlix.Database
 {

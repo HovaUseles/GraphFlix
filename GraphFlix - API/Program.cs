@@ -2,10 +2,33 @@ using GraphFlix.Appsettings;
 using GraphFlix.Database;
 using GraphFlix.Managers;
 using GraphFlix.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+string corsPolicy = "_allow";
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+options.TokenValidationParameters = new TokenValidationParameters
+{
+ValidateIssuer = true,
+ValidateAudience = true,
+ValidateLifetime = true,
+ValidateIssuerSigningKey = true,
+ValidIssuer = "https://localhost:7172",
+ValidAudience = "https://localhost:7172",
+IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TestCertificateAndJwtKomNuForHelvedeHvorMangeTegnSkalDerTil"))
+};
+});
 
 builder.Services.AddControllers();
 builder.Services.Configure<Neo4JSettings>(builder.Configuration.GetSection("Neo4jSettings"));
@@ -19,8 +42,18 @@ builder.Services.AddScoped<MovieRepository>();
 builder.Services.AddScoped<IMovieManager, MovieManager>();
 builder.Services.AddScoped<IUserManager, UserManager>();
 builder.Services.AddScoped<IMovieRepository, MockMovieRepository>();
+builder.Services.AddScoped<IUserRepository, MockUserRepository>();
 //builder.Services.AddScoped<IMovieRepository, Neo4jMovieRepository>();
 //builder.Services.AddScoped<IUserRepository, Neo4jUserRepository>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicy,
+                      policy =>
+                      {
+                          policy.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod();
+                      });
+});
 
 var app = builder.Build();
 
@@ -32,6 +65,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(corsPolicy);
 
 app.UseAuthorization();
 

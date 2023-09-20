@@ -1,5 +1,6 @@
 ﻿using GraphFlix.DTOs;
 using GraphFlix.Managers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 
@@ -18,15 +19,25 @@ namespace GraphFlix.Controllers
             _movieManager = movieManager;
         }
 
-        // GET: api/<MovieController>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
-        {
-            return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
-        }
+        //// GET: api/<MovieController>
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
+        //{
+        //    return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
+        //}
 
-        // GET api/<MovieController>/5
-        [HttpGet("{id}")]
+		// GET: api/<MovieController>
+		[HttpGet]
+        [Route("recommended")]
+        [ActionName("Index")]
+		[Authorize(Roles = "Admin")]
+		public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
+		{
+			return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
+		}
+
+		// GET api/<MovieController>/5
+		[HttpGet("{id}")]
         public async Task<ActionResult<MovieDto>> Get(string id)
         {
             if(string.IsNullOrWhiteSpace(id))
@@ -38,7 +49,8 @@ namespace GraphFlix.Controllers
 
         // POST api/<MovieController>
         [HttpPost]
-        public async Task<ActionResult<MovieDto>> Post([FromBody] MovieDto model)
+		[Authorize(Roles = "Admin")]
+		public async Task<ActionResult<MovieDto>> Post([FromBody] MovieDto model)
         {
             if (ModelState.IsValid)
             {

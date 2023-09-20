@@ -4,26 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GraphFlix.Controllers
 {
-    public class AuthController : Controller
-    {
-		[Route("api/[controller]")]
-		[ApiController]
-		public class JwtController : ControllerBase
+	[Route("api/[controller]")]
+	[ApiController]
+	public class AuthController : ControllerBase
+	{
+		[HttpPost]
+		public IActionResult Post([FromBody] LoginDto request)
 		{
-			[HttpPost]
-			public IActionResult Post([FromBody] UserDto request)
+			// Check if username and password is valid through db instead
+			if (request.Username == "Mikkel@mikkel" && request.Password == "Mikkel123")
 			{
-				var result = new List<KeyValuePair<string, string>>();
+				Token token = AuthProcessor.Generate();
 
-				// Check if username and password is valid through db instead
-				if (request.Username == "Mikkel" && request.Password == "Mikkel123")
-				{
-					Token token = AuthProcessor.Generate();
-
-					return Ok(token);
-				}
-				else return BadRequest();
+				return Ok(token);
 			}
+			else return BadRequest();
 		}
 	}
 }
