@@ -17,8 +17,8 @@ builder.Services.AddScoped<INeo4J, Neo4J>();
 builder.Services.AddScoped<MovieRepository>();
 
 builder.Services.AddScoped<IMovieManager, MovieManager>();
-builder.Services.AddScoped<IUserManager, UserManager>();
-builder.Services.AddScoped<IMovieRepository, MockMovieRepository>();
+//builder.Services.AddScoped<IUserManager, UserManager>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 //builder.Services.AddScoped<IMovieRepository, Neo4jMovieRepository>();
 //builder.Services.AddScoped<IUserRepository, Neo4jUserRepository>();
 
