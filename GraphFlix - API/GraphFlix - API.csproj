@@ -15,9 +15,4 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Neo4jCipher\Neo4jCipher.csproj" />
-  </ItemGroup>
-
 </Project>

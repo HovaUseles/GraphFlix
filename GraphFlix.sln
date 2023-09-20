@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphFlix - API", "GraphFli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphFlix - API - Tests", "GraphFlix - API - Tests\GraphFlix - API - Tests.csproj", "{F7548405-D306-4240-9BF4-D658EC71961A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo4jCipher", "Neo4jCipher\Neo4jCipher.csproj", "{D63D8FF2-98DD-4D34-BD75-9DBCD55865AF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{F7548405-D306-4240-9BF4-D658EC71961A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7548405-D306-4240-9BF4-D658EC71961A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7548405-D306-4240-9BF4-D658EC71961A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D63D8FF2-98DD-4D34-BD75-9DBCD55865AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D63D8FF2-98DD-4D34-BD75-9DBCD55865AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D63D8FF2-98DD-4D34-BD75-9DBCD55865AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D63D8FF2-98DD-4D34-BD75-9DBCD55865AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -21,7 +21,7 @@ public class Neo4J : INeo4J, IDisposable
     {
         _driver = GraphDatabase.Driver(appSettings.Value.Uri, AuthTokens.Basic(appSettings.Value.Username, appSettings.Value.Password));
     }
-    public async Task<List<T>> ExecuteReadAsync<T>(Neo4jCipher.IQuery query)
+    public async Task<List<T>> ExecuteReadAsync<T>(IQuery query)
     {
         try
         {
@@ -122,7 +122,7 @@ public class Neo4J : INeo4J, IDisposable
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
-    public async Task ExecuteCreateAsync(Neo4jCipher.IQuery query)
+    public async Task ExecuteCreateAsync(IQuery query)
     {
         try
         {

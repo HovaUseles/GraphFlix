@@ -1,7 +1,6 @@
 ﻿
 
 using Neo4j.Driver;
-using Neo4jCipher;
 
 namespace GraphFlix.Database
 {
@@ -13,7 +12,7 @@ namespace GraphFlix.Database
         /// <typeparam name="T"></typeparam>
         /// <param name="query"></param>
         /// <returns>list of T (generic)</returns>
-        public Task<List<T>> ExecuteReadAsync<T>(Neo4jCipher.IQuery query);
+        public Task<List<T>> ExecuteReadAsync<T>(IQuery query);
         /// <summary>
         /// Reads from neo4j database
         /// </summary>

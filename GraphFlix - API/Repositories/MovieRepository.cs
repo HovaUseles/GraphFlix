@@ -2,7 +2,6 @@
 using GraphFlix.DTOs;
 using GraphFlix.Helper;
 using GraphFlix.Models;
-using Neo4jCipher;
 
 namespace GraphFlix.Repositories;
 
