@@ -5,19 +5,16 @@ using System.Text;
 using GraphFlix.Models;
 using System.Diagnostics;
 
-namespace GraphFlix
+namespace GraphFlix.Processors
 {
     public class AuthProcessor
     {
-        private const string _jwtPublicKey = "TestCertificateAndJwtKomNuForHelvedeHvorMangeTegnSkalDerTil"; // Move to appsettings or environment variable
-        private const string _url = "https://localhost:7172"; // Move to appsettings or environment variable
-		private const int _tokenValidity = 60; // Minutes
-
         public static Token Generate()
         {
             byte[] tokenKey = GetTokenKey();
             DateTime tokenExpiresTime = SetTokenExpiry();
-            SecurityTokenDescriptor securityTokenDescriptor = GetDescriptor(GetRoleClaim(), tokenExpiresTime, tokenKey);
+            List<Claim> claims = new List<Claim> { GetRoleClaim(), GetUserIdClaim() };
+            SecurityTokenDescriptor securityTokenDescriptor = GetDescriptor(claims, tokenExpiresTime, tokenKey);
             return AssignTokenProperties(securityTokenDescriptor, tokenExpiresTime);
         }
 
@@ -25,7 +22,7 @@ namespace GraphFlix
         {
             try
             {
-                return Encoding.UTF8.GetBytes(_jwtPublicKey);
+                return Encoding.UTF8.GetBytes(GetAppSettings("JwtKey"));
             }
             catch (Exception ex)
             {
@@ -34,11 +31,11 @@ namespace GraphFlix
             }
         }
 
-		private static DateTime SetTokenExpiry()
+        private static DateTime SetTokenExpiry()
         {
             try
             {
-                return DateTime.Now.AddMinutes(_tokenValidity);
+                return DateTime.Now.AddMinutes(Convert.ToDouble(GetAppSettings("JwtValidityInMinutes")));
             }
             catch (Exception ex)
             {
@@ -47,25 +44,30 @@ namespace GraphFlix
             }
         }
 
-		private static SecurityTokenDescriptor GetDescriptor(List<Claim> claims, DateTime tokenExpiresTime, byte[] tokenKey)
+        private static SecurityTokenDescriptor GetDescriptor(List<Claim> claims, DateTime tokenExpiresTime, byte[] tokenKey)
         {
             return new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Audience = _url,
-                Issuer = _url,
+                Audience = GetAppSettings("JwtUrl"),
+                Issuer = GetAppSettings("JwtUrl"),
                 Expires = tokenExpiresTime,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256)
             };
         }
 
-		private static List<Claim> GetRoleClaim()
+        private static Claim GetRoleClaim()
         {
             // Get role from db instead
-            return new List<Claim> { new Claim(ClaimTypes.Role, "Admin") };
+            return new Claim(ClaimTypes.Role, "Admin");
+        }
+        private static Claim GetUserIdClaim()
+        {
+            // Get user id from db instead
+            return new Claim("UserId", "0");
         }
 
-		private static Token AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
+        private static Token AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
         {
             Token newToken = new Token();
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -82,6 +84,13 @@ namespace GraphFlix
                 Debug.WriteLine(ex);
                 throw;
             }
+        }
+
+        private static string GetAppSettings(string property)
+        {
+            IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile($"appsettings.json", true, true);
+            IConfigurationRoot config = builder.Build();
+            return config[property];
         }
     }
 }
