@@ -161,7 +161,7 @@ public class Query : IQuery
     {
         _queryString.Append("MATCH (");
         _queryString.Append(match);
-        _queryString.Append(")");
+        _queryString.Append(") ");
         return this;
     }
 
