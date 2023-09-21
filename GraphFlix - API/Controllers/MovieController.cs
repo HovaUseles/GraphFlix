@@ -1,4 +1,5 @@
-﻿using GraphFlix.DTOs;
+﻿using GraphFlix.DTOs;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -18,22 +19,12 @@ namespace GraphFlix.Controllers
             _movieManager = movieManager;
         }
 
-        //// GET: api/<MovieController>
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
-        //{
-        //    return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
-        //}
-
-		// GET: api/<MovieController>
-		[HttpGet]
-        [Route("recommended")]
-        [ActionName("Index")]
-		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
-		{
-			return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
-		}
+        // GET: api/<MovieController>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
+        {
+            return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
+        }
 
 		// GET api/<MovieController>/5
 		[HttpGet("{id}")]

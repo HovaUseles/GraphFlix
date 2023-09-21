@@ -1,4 +1,5 @@
-﻿using GraphFlix.DTOs;
+﻿using GraphFlix.DTOs;
+
 using GraphFlix.Models;
 using GraphFlix.Repositories;
 using GraphFlix.Services;
