@@ -2,18 +2,18 @@
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using GraphFlix.Models;
 using System.Diagnostics;
+using GraphFlix.DTOs;
 
-namespace GraphFlix
+namespace GraphFlix.Services
 {
     public class AuthProcessor
     {
         private const string _jwtPublicKey = "TestCertificateAndJwtKomNuForHelvedeHvorMangeTegnSkalDerTil"; // Move to appsettings or environment variable
         private const string _url = "https://localhost:7172"; // Move to appsettings or environment variable
-		private const int _tokenValidity = 60; // Minutes
+        private const int _tokenValidity = 60; // Minutes
 
-        public static Token Generate()
+        public static TokenDto Generate()
         {
             byte[] tokenKey = GetTokenKey();
             DateTime tokenExpiresTime = SetTokenExpiry();
@@ -34,7 +34,7 @@ namespace GraphFlix
             }
         }
 
-		private static DateTime SetTokenExpiry()
+        private static DateTime SetTokenExpiry()
         {
             try
             {
@@ -47,7 +47,7 @@ namespace GraphFlix
             }
         }
 
-		private static SecurityTokenDescriptor GetDescriptor(List<Claim> claims, DateTime tokenExpiresTime, byte[] tokenKey)
+        private static SecurityTokenDescriptor GetDescriptor(List<Claim> claims, DateTime tokenExpiresTime, byte[] tokenKey)
         {
             return new SecurityTokenDescriptor
             {
@@ -59,15 +59,15 @@ namespace GraphFlix
             };
         }
 
-		private static List<Claim> GetRoleClaim()
+        private static List<Claim> GetRoleClaim()
         {
             // Get role from db instead
             return new List<Claim> { new Claim(ClaimTypes.Role, "Admin") };
         }
 
-		private static Token AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
+        private static TokenDto AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
         {
-            Token newToken = new Token();
+            TokenDto newToken = new TokenDto();
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
 

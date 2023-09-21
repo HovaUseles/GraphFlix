@@ -1,0 +1,265 @@
+@startuml Classdiagram
+skinparam groupInheritance 2
+
+'*********'
+'* DTO's *'
+'*********'
+class MovieDto {
+    +int Id
+    +string Title
+    +DateTime ReleaseDate
+    +IEnumerable<Genre> Genres
+}
+
+class DetailedMovieDto {
+    +int Id
+    +string Title
+    +DateTime ReleaseDate
+    +IEnumerable<GenreDto> Genres
+    +IEnumerable<PersonDto> Actors
+    +IEnumerable<PersonDto> Direcors
+}
+
+class GenreDto {
+    +int Id
+    +string Name
+}
+
+class PersonDto {
+    +int Id
+    +string FirstName
+    +string LastName
+    +DateOnly DateOfBirth
+}
+
+class UserDto {
+    +int Id
+    +string Username
+    +bool CookieAccept
+}
+
+class RecommendMovieDto {
+    +int MovieId
+}
+
+class TokenDto {
+    +string TokenString
+    +int ExpiresIn
+}
+
+
+'***************'
+'* Controllers *'
+'***************'
+
+class UserController {
+    -IUserRepository _userRepository
+    +ActionResult<IEnumerable<UserDto>> Get()
+    +ActionResult<UserDto> Get(int id)
+    +ActionResult<UserDto> Update(int id, UserDto dto)
+    +ActionResult<UserDto> Delete(int id)  
+}
+UserDto <-- UserController : Uses
+UserController ....> IUserRepository : Dependency
+
+class MovieController {
+    -IMovieRepository _movieRepository
+    +ActionResult<IEnumerable<MovieDto>> Get()
+    +ActionResult<MovieDto> Get(int id)
+    +ActionResult<MovieDto> Create(MovieDto dto)
+    +ActionResult<MovieDto> Update(MovieDto dto)
+    +ActionResult<MovieDto> Delete(int id)
+}
+MovieDto <-- MovieController : Uses
+MovieController ....> IMovieRepository : Dependency
+
+class RecommendedController {
+    -IMovieRepository _movieRepository
+    -IEdgeRepository _edgeRepository
+    +Task<ActionResult<IEnumerable<MovieDto>>> GetRecommended()
+    +Task<ActionResult> Recommend(RecommendMovieDto dto)
+}
+MovieDto <-- RecommendedController : Uses
+RecommendMovieDto <-- RecommendedController : Uses
+RecommendedController ....> IMovieRepository : Dependency
+RecommendedController ....> IEdgeRepository : Dependency
+
+class AuthController {
+    -IHashingService _hashService
+    -ITokenService _tokenService
+    +ActionResult<TokenDto> Login(LoginDto loginDetails)
+    +ActionResult> Register(LoginDto registerDetails)
+    +ActionResult<bool> ValidateToken(TokenDto token)
+}
+AuthController ..> IHashingService : Dependency
+AuthController ..> ITokenService : Dependency
+TokenDto <-- AuthController : Uses
+
+
+'************'
+'* Services *'
+'************'
+
+interface "IHashingservice" as IHashingService {
+    +string HashPassword(string password, string salt)
+}
+
+class HashingService {
+    +string HashPassword(string password)
+}
+IHashingService <|.. HashingService : implements
+
+interface "ITokenService" as ITokenService {
+    +Token BuildNewToken(UserDto user)
+}
+UserDto <-- ITokenService
+
+class TokenService {
+    +Token BuildNewToken()
+}
+TokenService --> Token : uses
+ITokenService <|.. TokenService : implements
+
+
+'**************'
+'* NodeModels *'
+'**************'
+
+class Movie {
+    +string Title
+    +DateTime ReleaseDate
+}
+
+class User {
+    +string Username
+    +string PasswordHash
+    +int Salt
+    +bool CookieAccept
+}
+
+class Role {
+    +string Name
+}
+
+class Token {
+    +string TokenString
+    +int ExpiresIn
+}
+
+class Genre {
+    +string Name
+}
+
+class Person {
+    +string Name
+}
+
+
+'*********'
+'* Edges *'
+'*********'
+
+interface "IEdge" as IEdge {
+    +string Edgename
+}
+class DirectedEdge {
+    +string Edgename
+    +Movie Movie
+}
+IEdge <|.. DirectedEdge : implements
+
+class ActedInEdge {
+    +string Edgename
+    +Movie Movie
+    +string Role
+}
+IEdge <|.. ActedInEdge : implements
+
+class ViewedEdge {
+    +string Edgename
+    +Movie Movie
+}
+IEdge <|.. ViewedEdge : implements
+
+class RecommendedEdge {
+    +string Edgename
+    +Movie Movie
+}
+IEdge <|.. RecommendedEdge : implements
+
+class GenreOfEdge {
+    +string Edgename
+    +Movie Genre
+}
+IEdge <|.. GenreOfEdge : implements
+
+class IsRoleEdge {
+    +string Edgename
+    +Movie Genre
+}
+IEdge <|.. IsRoleEdge : implements
+
+
+'****************'
+'* Repositories *'
+'****************'
+
+interface "IUserRepository" as IUserRepository {
+    +IEnumerable<UserDto> GetAll() 
+    +UserDto GetById(int id)
+    +UserDto GetByUsername(string username)
+    +UserDto VerifyLogin(string username, string PasswordHash)
+    +UserDto Create(UserDto user)
+    +UserDto Update(UserDto userChanges)
+    +UserDto Delete(int id)
+}
+User <--* UserRepository
+UserDto <-- IUserRepository : has
+
+class UserRepository {
+    -IDataHandler _handler
+    +IEnumerable<UserDto> GetAll() 
+    +UserDto GetById(int id)
+    +UserDto GetByUsername(string username)
+    +UserDto VerifyLogin(string username, string PasswordHash)
+    +UserDto Create(UserDto user)
+    +UserDto Update(UserDto userChanges)
+    +UserDto Delete(int id)
+}
+IUserRepository <|.. UserRepository : implements
+UserRepository o--> IDataHandler : has
+
+interface "IMovieRepository" as IMovieRepository {
+    +IEnumerable<MovieDto> GetAll() 
+    +MovieDto GetById(int id)
+    +MovieDto Create(MovieDto Movie)
+    +MovieDto Update(MovieDto MovieChanges)
+    +MovieDto Delete(int id)
+    +IEnumerable<MovieDto> RecommendedMovies(string userId)
+}
+Movie <--* IMovieRepository
+MovieDto <--- IMovieRepository : uses
+
+class MovieRepository {
+    -IDataHandler _handler
+    +IEnumerable<MovieDto> GetAll() 
+    +MovieDto GetById(int id)
+    +MovieDto Create(MovieDto Movie)
+    +MovieDto Update(MovieDto MovieChanges)
+    +MovieDto Delete(int id)
+    +IEnumerable<MovieDto> RecommendedMovies(UserDto user)
+}
+IMovieRepository <|.. MovieRepository : implements
+MovieRepository o--> IDataHandler : has
+
+interface IEdgeRepository {
+    +Task CreateEdge<? extends Extends IEdge>(TFrom from, TTo to)
+}
+IEdge <-- IEdgeRepository : uses
+
+interface "IDataHandler" as IDataHandler {
+    +ExecuteQueryReadAsync(string query)
+    +ExecuteQueryWriteAsync(string query)
+}
+
+@enduml

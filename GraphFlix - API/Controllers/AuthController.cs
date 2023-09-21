@@ -1,24 +1,68 @@
-﻿using GraphFlix.DTOs;
+﻿using GraphFlix.DTOs;
 using GraphFlix.Models;
+using GraphFlix.Repositories;
+using GraphFlix.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GraphFlix.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{
-		[HttpPost]
-		public IActionResult Post([FromBody] LoginDto request)
-		{
-			// Check if username and password is valid through db instead
-			if (request.Username == "Mikkel@mikkel" && request.Password == "Mikkel123")
-			{
-				Token token = AuthProcessor.Generate();
+		private IUserRepository _userRepository { get; }
+		private IHashingService _hashingService { get; }
+		private ITokenService _tokenService { get; }
 
-				return Ok(token);
+        public AuthController(
+			IUserRepository userRepository, 
+			IHashingService hashingService, 
+			ITokenService tokenService)
+        {
+            _userRepository = userRepository;
+            _hashingService = hashingService;
+            _tokenService = tokenService;
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult<TokenDto>> Login([FromBody] LoginDto request)
+		{
+			if(!ModelState.IsValid)
+			{
+				return StatusCode(StatusCodes.Status400BadRequest, "Invalid request data");
 			}
-			else return BadRequest();
+
+			string? salt = await _userRepository.GetByUserSalt(request.Username);
+			if(salt == null)
+			{
+				return StatusCode(StatusCodes.Status400BadRequest, "User could not be found");
+			}
+
+			string passwordHash = _hashingService.HashPassword(request.Password, salt);
+
+			if(await _userRepository.TryVerifyLogin(request.Username, passwordHash, out UserDto user))
+			{
+				//TokenDto token = _tokenService.CreateToken(user);
+				TokenDto token = AuthProcessor.Generate();
+                return StatusCode(StatusCodes.Status200OK, token);
+			}
+			
+			// Login not verified
+            return StatusCode(StatusCodes.Status400BadRequest, "Invalid request data");
+
+        }
+
+        [HttpPost("[action]")]
+		public async Task<ActionResult> Register([FromBody] LoginDto request)
+		{
+			if (!ModelState.IsValid)
+			{
+				return StatusCode(StatusCodes.Status400BadRequest, "Invalid request data");
+			}
+
+			UserDto createdUser = await _userRepository.Create(request);
+
+			return StatusCode(StatusCodes.Status200OK);
 		}
 	}
 }

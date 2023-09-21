@@ -7,13 +7,16 @@ namespace GraphFlix.Repositories
 
         public Task<IEnumerable<UserDto>> GetAll();
 
-        public Task<UserDto?> GetById(string id);
+        public Task<UserDto?> GetById(int id);
 
-        public Task<UserDto> Create(UserDto user);
+        public Task<string?> GetByUserSalt(string username);
 
-        public Task<UserDto> Update(UserDto userChanges);
+        public Task<bool> TryVerifyLogin(string username, string passwordHash, out UserDto user);
 
-        public Task<UserDto> Delete(string id);
-        Task<UserDto> Update(object userChanges);
+        public Task<UserDto> Create(LoginDto user);
+
+        public Task<UserDto> Update(int id, UserDto userChanges);
+
+        public Task<UserDto> Delete(int id);
     }
 }
