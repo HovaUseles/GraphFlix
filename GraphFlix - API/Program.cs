@@ -40,7 +40,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<INeo4J, Neo4J>();
 builder.Services.AddScoped<MovieRepository>();
 
-builder.Services.AddScoped<ITokenService, AuthProcessor>();
+builder.Services.AddTransient<ITokenService, AuthProcessor>();
 
 builder.Services.AddScoped<IMovieRepository, MockMovieRepository>();
 builder.Services.AddScoped<IUserRepository, MockUserRepository>();

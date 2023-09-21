@@ -1,5 +1,4 @@
 ﻿using GraphFlix.DTOs;
-using GraphFlix.Managers;
 using GraphFlix.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

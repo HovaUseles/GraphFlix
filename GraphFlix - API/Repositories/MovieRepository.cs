@@ -80,7 +80,7 @@ public class MovieRepository : IMovieRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<MovieDto>> GetRecommendedMovies(string userId)
+    public Task<IEnumerable<MovieDto>> GetRecommendedMovies(int userId)
     {
         throw new NotImplementedException();
     }

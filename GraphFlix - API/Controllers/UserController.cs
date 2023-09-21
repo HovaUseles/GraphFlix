@@ -1,4 +1,4 @@
-﻿using GraphFlix.DTOs;
+﻿using GraphFlix.DTOs;using GraphFlix.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,29 +10,25 @@ namespace GraphFlix.Controllers
     {
 
 		public static string Name { get => nameof(UserController).Replace("Controller", ""); }
-		private IUserManager _userManager { get; }
+		private IUserRepository _userRepository { get; }
 
-		public UserController(IUserManager _userManager)
+		public UserController(IUserRepository _userRepository)
 		{
-			this._userManager = _userManager;
+			this._userRepository = _userRepository;
 		}
 
 		// GET: api/<UserController>
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<UserDto>>> Get()
 		{
-			return StatusCode(StatusCodes.Status200OK, await _userManager.GetUsers());
+			return StatusCode(StatusCodes.Status200OK, await _userRepository.GetAll());
 		}
 
 		// GET api/<UserController>/5
 		[HttpGet("{id}")]
-		public async Task<ActionResult<UserDto>> Get(string id)
+		public async Task<ActionResult<UserDto>> Get(int id)
 		{
-			if (string.IsNullOrWhiteSpace(id))
-			{
-				return StatusCode(StatusCodes.Status400BadRequest);
-			}
-			UserDto model = await _userManager.GetUser(id);
+			UserDto model = await _userRepository.GetById(id);
 			if (model == null)
 			{
 				return StatusCode(StatusCodes.Status404NotFound);
@@ -40,25 +36,13 @@ namespace GraphFlix.Controllers
 			return StatusCode(StatusCodes.Status200OK, model);
 		}
 
-		// POST api/<UserController>
-		[HttpPost]
-		public async Task<ActionResult<UserDto>> Post([FromBody] UserDto model)
-		{
-			if (ModelState.IsValid)
-			{
-				UserDto createdModel = await _userManager.CreateUser(model);
-				return StatusCode(StatusCodes.Status201Created, createdModel);
-			}
-			return StatusCode(StatusCodes.Status400BadRequest);
-		}
-
 		// PUT api/<UserController>/5
 		[HttpPut("{id}")]
-		public async Task<ActionResult<UserDto>> Put(string id, [FromBody] UserDto modelChanges)
+		public async Task<ActionResult<UserDto>> Put(int id, [FromBody] UserDto modelChanges)
 		{
 			if (ModelState.IsValid)
 			{
-				UserDto updatedModel = await _userManager.UpdateUser(modelChanges);
+				UserDto updatedModel = await _userRepository.Update(id, modelChanges);
 				return StatusCode(StatusCodes.Status200OK, updatedModel);
 			}
 			return StatusCode(StatusCodes.Status400BadRequest);
@@ -66,13 +50,9 @@ namespace GraphFlix.Controllers
 
 		// DELETE api/<UserController>/5
 		[HttpDelete("{id}")]
-		public async Task<ActionResult> Delete(string id)
+		public async Task<ActionResult> Delete(int id)
 		{
-			if (string.IsNullOrWhiteSpace(id))
-			{
-				return StatusCode(StatusCodes.Status400BadRequest);
-			}
-			UserDto deletedModel = await _userManager.DeleteUser(id);
+			UserDto deletedModel = await _userRepository.Delete(id);
 			return StatusCode(StatusCodes.Status204NoContent);
 		}
 

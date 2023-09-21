@@ -1,5 +1,5 @@
 ﻿using GraphFlix.DTOs;
-
+using GraphFlix.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -12,18 +12,18 @@ namespace GraphFlix.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        private IMovieManager _movieManager { get; }
+        private IMovieRepository _movieRepository { get; }
 
-        public MovieController(IMovieManager movieManager)
+        public MovieController(IMovieRepository movieRepository)
         {
-            _movieManager = movieManager;
+            _movieRepository = movieRepository;
         }
 
         // GET: api/<MovieController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
         {
-            return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
+            return StatusCode(StatusCodes.Status200OK, await _movieRepository.GetAll());
         }
 
 		// GET api/<MovieController>/5
@@ -34,7 +34,7 @@ namespace GraphFlix.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovie(id));
+            return StatusCode(StatusCodes.Status200OK, await _movieRepository.GetById(id));
         }
 
         // POST api/<MovieController>
@@ -44,7 +44,7 @@ namespace GraphFlix.Controllers
         {
             if (ModelState.IsValid)
             {
-                MovieDto createdModel = await _movieManager.CreateMovie(model);
+                MovieDto createdModel = await _movieRepository.Create(model);
                 return StatusCode(StatusCodes.Status201Created, createdModel);
             }
             return StatusCode(StatusCodes.Status400BadRequest);
@@ -56,7 +56,7 @@ namespace GraphFlix.Controllers
         {
             if (ModelState.IsValid)
             {
-                MovieDto updatedModel = await _movieManager.UpdateMovie(modelChanges);
+                MovieDto updatedModel = await _movieRepository.Update(modelChanges);
                 return StatusCode(StatusCodes.Status200OK, updatedModel);
             }
             return StatusCode(StatusCodes.Status400BadRequest);
@@ -70,7 +70,7 @@ namespace GraphFlix.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            MovieDto deletedModel = await _movieManager.DeleteMovie(id);
+            MovieDto deletedModel = await _movieRepository.Delete(id);
             if (deletedModel == null)
             {
                 return StatusCode(StatusCodes.Status404NotFound);

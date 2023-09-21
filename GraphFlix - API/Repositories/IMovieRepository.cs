@@ -14,6 +14,6 @@ namespace GraphFlix.Repositories
 
         public Task<MovieDto> Delete(string id);
 
-        public Task<IEnumerable<MovieDto>> GetRecommendedMovies(string userId);
+        public Task<IEnumerable<MovieDto>> GetRecommendedMovies(int userId);
     }
 }

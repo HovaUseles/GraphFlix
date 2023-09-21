@@ -1,5 +1,4 @@
-﻿using GraphFlix.DTOs;
-using GraphFlix.Managers;
+﻿using GraphFlix.DTOs;using GraphFlix.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +8,11 @@ namespace GraphFlix.Controllers
     [ApiController]
     public class RecommendController : Controller
     {
-        private IMovieManager _movieManager { get; }
+        private IMovieRepository _movieRepository { get; }
 
-        public RecommendController(IMovieManager movieManager)
+        public RecommendController(IMovieRepository movieRepository)
         {
-            _movieManager = movieManager;
+            _movieRepository = movieRepository;
         }
 
         // GET: api/<RecommendController>
@@ -21,7 +20,10 @@ namespace GraphFlix.Controllers
         [Authorize(Roles = "User, Admin")]
         public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
         {
-            return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
+            // TODO: Get user from token
+            int userId = 0;
+
+            return StatusCode(StatusCodes.Status200OK, await _movieRepository.GetRecommendedMovies(userId));
         }
     }
 }
