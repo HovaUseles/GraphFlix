@@ -42,8 +42,9 @@ namespace GraphFlix.Controllers
 
 			string passwordHash = _hashingService.HashPassword(request.Password, salt);
 
-			if(await _userRepository.TryVerifyLogin(request.Username, passwordHash, out UserDto user))
+			if(await _userRepository.VerifyLogin(request.Username, passwordHash))
 			{
+				UserDto user = await _userRepository.GetByUsername(request.Username);
 				TokenDto token = _tokenService.CreateToken(user);
                 return StatusCode(StatusCodes.Status200OK, token);
 			}

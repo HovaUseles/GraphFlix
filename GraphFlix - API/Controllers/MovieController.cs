@@ -28,12 +28,8 @@ namespace GraphFlix.Controllers
 
 		// GET api/<MovieController>/5
 		[HttpGet("{id}")]
-        public async Task<ActionResult<MovieDto>> Get(string id)
+        public async Task<ActionResult<MovieDto>> Get(int id)
         {
-            if(string.IsNullOrWhiteSpace(id))
-            {
-                return StatusCode(StatusCodes.Status400BadRequest);
-            }
             return StatusCode(StatusCodes.Status200OK, await _movieRepository.GetById(id));
         }
 
@@ -53,11 +49,11 @@ namespace GraphFlix.Controllers
 
         // PUT api/<MovieController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<MovieDto>> Put(string id, [FromBody] MovieDto modelChanges)
+        public async Task<ActionResult> Put(int id, [FromBody] MovieDto modelChanges)
         {
             if (ModelState.IsValid)
             {
-                await _movieRepository.Update(modelChanges);
+                await _movieRepository.Update(id, modelChanges);
                 return StatusCode(StatusCodes.Status200OK);
             }
             return StatusCode(StatusCodes.Status400BadRequest);
@@ -65,12 +61,8 @@ namespace GraphFlix.Controllers
 
         // DELETE api/<MovieController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(int id)
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return StatusCode(StatusCodes.Status400BadRequest);
-            }
             await _movieRepository.Delete(id);
 
             return StatusCode(StatusCodes.Status204NoContent);

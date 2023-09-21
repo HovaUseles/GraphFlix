@@ -19,7 +19,7 @@ public class MovieRepository : IMovieRepository
         return result;
     }
 
-    public async Task<MovieDto?> GetById(string id)
+    public async Task<MovieDto?> GetById(int id)
     {
         IQuery q1 = new Query().PlainQuery($"MATCH (m:Movie WHERE m.id = {id}) RETURN m LIMIT 1");
         var result = await neo.ExecuteReadAsync<MovieDto>(q1);
@@ -45,12 +45,12 @@ public class MovieRepository : IMovieRepository
         }
     }
 
-    public Task Update(MovieDto movieChanges)
+    public Task Update(int id, MovieDto movieChanges)
     {
         throw new NotImplementedException();
     }
 
-    public async Task Delete(string id)
+    public async Task Delete(int id)
     {
         IQuery query = new Query().PlainQuery($"MATCH (m:Movie WHERE m.Id = {id}) DETACH DELETE m");
         await neo.ExecuteWriteAsync(query);

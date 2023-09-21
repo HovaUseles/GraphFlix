@@ -41,6 +41,8 @@ builder.Services.AddScoped<INeo4J, Neo4J>();
 builder.Services.AddScoped<MovieRepository>();
 
 builder.Services.AddTransient<ITokenService, AuthProcessor>();
+builder.Services.AddTransient<IHashingService, HashProcessor>();
+builder.Services.AddTransient<ISaltService, SaltProcessor>();
 
 builder.Services.AddScoped<IMovieRepository, MockMovieRepository>();
 builder.Services.AddScoped<IUserRepository, MockUserRepository>();

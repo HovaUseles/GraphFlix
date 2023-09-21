@@ -5,7 +5,7 @@ namespace GraphFlix.DTOs
     public class MovieDto
     {
 
-        public string? Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public DateOnly ReleaseDate { get; set; }
 

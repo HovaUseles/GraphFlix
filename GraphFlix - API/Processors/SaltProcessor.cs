@@ -1,9 +1,10 @@
-﻿using System.Diagnostics;
+﻿using GraphFlix.Services;
+using System.Diagnostics;
 using System.Security.Cryptography;
 
 namespace GraphFlix.Processors
 {
-    public class SaltProcessor
+    public class SaltProcessor : ISaltService
     {
         public string GenerateSalt()
         {

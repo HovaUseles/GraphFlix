@@ -10,6 +10,7 @@ class MovieDto {
     +DateTime ReleaseDate
     +IEnumerable<Genre> Genres
 }
+MovieDto "1" o-> "many" GenreDto 
 
 class DetailedMovieDto {
     +int Id
@@ -19,6 +20,8 @@ class DetailedMovieDto {
     +IEnumerable<PersonDto> Actors
     +IEnumerable<PersonDto> Direcors
 }
+DetailedMovieDto "1" o-> "many" GenreDto 
+DetailedMovieDto "1" o-> "many" PersonDto 
 
 class GenreDto {
     +int Id
@@ -32,11 +35,18 @@ class PersonDto {
     +DateOnly DateOfBirth
 }
 
+class RoleDto {
+    +int Id
+    +string Name
+}
+
 class UserDto {
     +int Id
     +string Username
     +bool CookieAccept
+    +IEnumerable<RoleDto> Roles
 }
+UserDto "1" o-> "many" RoleDto
 
 class RecommendMovieDto {
     +int MovieId
@@ -66,11 +76,12 @@ class MovieController {
     -IMovieRepository _movieRepository
     +ActionResult<IEnumerable<MovieDto>> Get()
     +ActionResult<MovieDto> Get(int id)
-    +ActionResult<MovieDto> Create(MovieDto dto)
+    +ActionResult<MovieDto> Create(DetailedMovieDto dto)
     +ActionResult<MovieDto> Update(MovieDto dto)
     +ActionResult<MovieDto> Delete(int id)
 }
 MovieDto <-- MovieController : Uses
+DetailedMovieDto <-- MovieController : Uses
 MovieController ....> IMovieRepository : Dependency
 
 class RecommendedController {
@@ -83,6 +94,12 @@ MovieDto <-- RecommendedController : Uses
 RecommendMovieDto <-- RecommendedController : Uses
 RecommendedController ....> IMovieRepository : Dependency
 RecommendedController ....> IEdgeRepository : Dependency
+
+class GenreController {
+    +Task<ActionResult<GenreDto>> Get()
+}
+GenreController ....> IGenreRepository : Dependency
+GenreDto <-- GenreController
 
 class AuthController {
     -IHashingService _hashService
@@ -104,21 +121,32 @@ interface "IHashingservice" as IHashingService {
     +string HashPassword(string password, string salt)
 }
 
-class HashingService {
+class HashProcessor {
     +string HashPassword(string password)
 }
-IHashingService <|.. HashingService : implements
+IHashingService <|.. HashProcessor : implements
+
+
+interface "ISaltservice" as ISaltService {
+    +string GenerateSalt()
+}
+
+class SaltProcessor {
+    +string GenerateSalt()
+}
+ISaltService <|.. SaltProcessor : implements
+
 
 interface "ITokenService" as ITokenService {
     +Token BuildNewToken(UserDto user)
 }
-UserDto <-- ITokenService
+UserDto <--- ITokenService
 
-class TokenService {
+class TokenProcessor {
     +Token BuildNewToken()
 }
 TokenService --> Token : uses
-ITokenService <|.. TokenService : implements
+ITokenService <|.. TokenProcessor : implements
 
 
 '**************'
@@ -136,11 +164,11 @@ class User {
     +int Salt
     +bool CookieAccept
 }
-
+/'
 class Role {
     +string Name
 }
-
+'/
 class Token {
     +string TokenString
     +int ExpiresIn
@@ -149,11 +177,11 @@ class Token {
 class Genre {
     +string Name
 }
-
+/'
 class Person {
     +string Name
 }
-
+'/
 
 '*********'
 '* Edges *'
@@ -227,6 +255,8 @@ class UserRepository {
     +UserDto Delete(int id)
 }
 IUserRepository <|.. UserRepository : implements
+IUserRepository ..> IHashingService : Dependency
+IUserRepository ..> ISaltService : Dependency
 UserRepository o--> IDataHandler : has
 
 interface "IMovieRepository" as IMovieRepository {
@@ -256,6 +286,17 @@ interface IEdgeRepository {
     +Task CreateEdge<? extends Extends IEdge>(TFrom from, TTo to)
 }
 IEdge <-- IEdgeRepository : uses
+
+interface IGenreRepository {
+    +IEnumerable<GenreDto> GetAll()
+}
+GenreDto <-- IGenreRepository
+
+class GenreRepository {
+    +IEnumerable<GenreDto> GetAll()
+}
+IGenreRepository <|.. GenreRepository : implements
+Genre <-- GenreRepository
 
 interface "IDataHandler" as IDataHandler {
     +ExecuteQueryReadAsync(string query)

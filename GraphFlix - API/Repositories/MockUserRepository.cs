@@ -24,17 +24,23 @@ namespace GraphFlix.Repositories
             throw new NotImplementedException();
         }
 
+        public Task<UserDto?> GetByUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<string?> GetUserSalt(string username)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> TryVerifyLogin(string username, string passwordHash, out UserDto user)
+
+        public Task Update(int id, UserDto userChanges)
         {
             throw new NotImplementedException();
         }
 
-        public Task Update(int id, UserDto userChanges)
+        public Task<bool> VerifyLogin(string username, string passwordHash)
         {
             throw new NotImplementedException();
         }

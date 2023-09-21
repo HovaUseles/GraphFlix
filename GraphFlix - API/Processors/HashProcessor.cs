@@ -1,10 +1,11 @@
-﻿using System.Diagnostics;
+﻿using GraphFlix.Services;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace GraphFlix.Processors
 {
-    public class HashProcessor
+    public class HashProcessor : IHashingService
     {
         public string GetHash(string input)
         {
@@ -38,6 +39,13 @@ namespace GraphFlix.Processors
                 Debug.WriteLine(e);
                 throw;
             }
+        }
+
+        public string HashPassword(string password, string salt)
+        {
+            int insertIndex = password.Length / 2;
+            string passwordSalt = password.Insert(insertIndex, salt);
+            return GetHash(passwordSalt);
         }
     }
 }

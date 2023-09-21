@@ -8,8 +8,6 @@ namespace GraphFlix.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
-		public static string Name { get => nameof(UserController).Replace("Controller", ""); }
 		private IUserRepository _userRepository { get; }
 
 		public UserController(IUserRepository _userRepository)
@@ -38,7 +36,7 @@ namespace GraphFlix.Controllers
 
 		// PUT api/<UserController>/5
 		[HttpPut("{id}")]
-		public async Task<ActionResult<UserDto>> Put(int id, [FromBody] UserDto modelChanges)
+		public async Task<ActionResult> Put(int id, [FromBody] UserDto modelChanges)
 		{
 			if (ModelState.IsValid)
 			{

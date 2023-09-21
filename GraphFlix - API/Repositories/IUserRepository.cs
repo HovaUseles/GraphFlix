@@ -8,10 +8,11 @@ namespace GraphFlix.Repositories
         public Task<IEnumerable<UserDto>> GetAll();
 
         public Task<UserDto?> GetById(int id);
+        public Task<UserDto?> GetByUsername(string username);
 
         public Task<string?> GetUserSalt(string username);
 
-        public Task<bool> TryVerifyLogin(string username, string passwordHash, out UserDto user);
+        public Task<bool> VerifyLogin(string username, string passwordHash);
 
         public Task Create(LoginDto user);
 

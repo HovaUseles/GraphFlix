@@ -1,4 +1,4 @@
-﻿using GraphFlix.Models;
+﻿using GraphFlix.Models.Edges;
 using Neo4j.Driver;
 using System;
 using System.Collections.Generic;
