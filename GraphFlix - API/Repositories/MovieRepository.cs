@@ -33,7 +33,7 @@ public class MovieRepository : IMovieRepository
             Title = movieDto.Title,
             ReleaseDate = movieDto.ReleaseDate,
         };
-        IQuery query = new Query().AddCreate(movie);
+        IQuery query = new Query().Create(movie);
         try
         {
             await neo.ExecuteWriteAsync(query);

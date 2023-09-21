@@ -1,4 +1,5 @@
 ﻿using GraphFlix.Appsettings;
+using GraphFlix.Helper;
 using Microsoft.Extensions.Options;
 using Neo4j.Driver;
 using Newtonsoft.Json;
@@ -35,11 +36,15 @@ public class Neo4J : INeo4J, IDisposable
                 return convertedJson;
             }
         }
-        catch (Exception)
+        catch (TransactionClosedException e)
         {
-
-            throw;
+            Log.Logger.Error("Error occured while run the query from database | Message {0}", e);
         }
+        catch (Exception e)
+        {
+            Log.Logger.Error("Unknow Error occured while reading from database | Message {0}", e);
+        }
+        return new List<T>();
 
 
     }
@@ -57,19 +62,12 @@ public class Neo4J : INeo4J, IDisposable
             for (int i = 0; i < records.Count; i++)
             {
                 var json = JsonConvert.SerializeObject(records[i].Values.FirstOrDefault().Value);
-                JObject jsonObject = JObject.Parse(json);
-                var id = jsonObject["Id"];
-
-                var jTokenProperties = jsonObject["Properties"];
-                jTokenProperties["Id"] = id;
-                var jsonProperties = JsonConvert.SerializeObject(jTokenProperties);
-                jsonList.Add(jsonProperties);
+                jsonList.Add(json);
             }
         }
-        catch (JsonReaderException j)
+        catch (Exception e)
         {
-
-            throw;
+            Log.Logger.Error($"Unknow error while serializing IRecord to json: {e}");
         }
 
         return jsonList;
@@ -78,11 +76,19 @@ public class Neo4J : INeo4J, IDisposable
     {
         var convertedJsonList = new List<T>();
 
-        foreach (var json in jsonList)
+        try
         {
-            var newObject = JsonConvert.DeserializeObject<T>(json);
-            convertedJsonList.Add(newObject);
+            foreach (var json in jsonList)
+            {
+                var newObject = JsonConvert.DeserializeObject<T>(json);
+                convertedJsonList.Add(newObject);
+            }
         }
+        catch (Exception e)
+        {
+            Log.Logger.Error("Unknow error while Deserializing json to object | Message {0}", e);
+        }
+
 
         return convertedJsonList;
     }
@@ -133,10 +139,9 @@ public class Neo4J : INeo4J, IDisposable
                 });
             }
         }
-        catch (Exception)
-        {
-
-            throw;
+        catch (Exception e)
+        {   
+            Log.Logger.Error($"Failed to execute {query.ToString()} | Message: {e}");
         }
 
     }

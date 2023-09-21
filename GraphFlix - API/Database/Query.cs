@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 namespace GraphFlix.Database;
 public interface IQuery
 {
-    public IQuery AddCreate<T>(T entity);
-    public IQuery AddCreate<T>(List<T> listEntity);
-    public IQuery AddDelete<T>(T model);
-    public IQuery AddDetachDelete<T>(T model);
-    public IQuery AddMatch(string match);
+    public IQuery Create<T>(T entity);
+    public IQuery Create<T>(List<T> listEntity);
+    public IQuery Delete<T>(T model);
+    public IQuery DetachDelete<T>(T model);
+    public IQuery Match(string match);
 
-    public IQuery AddWhere(LambdaExpression condition);
+    public IQuery Where(LambdaExpression condition);
 
-    public IQuery AddReturn<T>(T model);
+    public IQuery Return<T>(T model);
     public IQuery CreateRelationship<T1, T2>(IEdge edge, int fromId, int toId);
     public IQuery PlainQuery(string query);
 }
@@ -62,7 +62,7 @@ public class Query : IQuery
         _queryString.Append("}");
 
     }
-    public IQuery AddCreate<T>(T entity)
+    public IQuery Create<T>(T entity)
     {
         Type entityType = typeof(T);
 
@@ -97,7 +97,7 @@ public class Query : IQuery
         _queryString.Append("})");
         return this;
     }
-    public IQuery AddCreate<T>(List<T> listEntity)
+    public IQuery Create<T>(List<T> listEntity)
     {
         _queryString.Append("CREATE ");
         for (int i = 0; i < listEntity.Count; i++)
@@ -147,17 +147,17 @@ public class Query : IQuery
         return this;
 
     }
-    public IQuery AddDelete<T>(T model)
+    public IQuery Delete<T>(T model)
     {
         _queryString.Append("DELETE ");
         return this;
     }
-    public IQuery AddDetachDelete<T>(T model)
+    public IQuery DetachDelete<T>(T model)
     {
         _queryString.Append("DETACH DELETE ");
         return this;
     }
-    public IQuery AddMatch(string match)
+    public IQuery Match(string match)
     {
         _queryString.Append("MATCH (");
         _queryString.Append(match);
@@ -165,14 +165,14 @@ public class Query : IQuery
         return this;
     }
 
-    public IQuery AddWhere(LambdaExpression condition)
+    public IQuery Where(LambdaExpression condition)
     {
         // Add 'WHERE' logic here
         _queryString.Append("WHERE ");
         _queryString.Append(condition);
         return this;
     }
-    public IQuery AddReturn<T>(T model)
+    public IQuery Return<T>(T model)
     {
         _queryString.Append("RETURN ");
         _queryString.Append(model);

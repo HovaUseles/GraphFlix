@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace GraphFlix___API___Tests;
 
-internal class QueryBuilderTests
+public class QueryTests
 {
 }

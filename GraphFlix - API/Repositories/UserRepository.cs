@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
         };
 
 
-        IQuery q1 = new Query().PlainQuery("");
+        IQuery q1 = new Query().Create(user);
         await neo.ExecuteWriteAsync(q1);
     }
 
@@ -41,7 +41,7 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<UserDto>> GetAll()
     {
-        IQuery q1 = new Query().PlainQuery("");
+        IQuery q1 = new Query().PlainQuery("MATCH (u:User) Return u");
         var result = await neo.ExecuteReadAsync<UserDto>(q1);
         return result;
     }
