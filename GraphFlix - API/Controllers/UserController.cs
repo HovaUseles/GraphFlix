@@ -42,8 +42,8 @@ namespace GraphFlix.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				UserDto updatedModel = await _userRepository.Update(id, modelChanges);
-				return StatusCode(StatusCodes.Status200OK, updatedModel);
+				await _userRepository.Update(id, modelChanges);
+				return StatusCode(StatusCodes.Status200OK);
 			}
 			return StatusCode(StatusCodes.Status400BadRequest);
 		}
@@ -52,7 +52,7 @@ namespace GraphFlix.Controllers
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(int id)
 		{
-			UserDto deletedModel = await _userRepository.Delete(id);
+			await _userRepository.Delete(id);
 			return StatusCode(StatusCodes.Status204NoContent);
 		}
 

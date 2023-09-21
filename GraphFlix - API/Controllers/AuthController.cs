@@ -61,7 +61,7 @@ namespace GraphFlix.Controllers
 				return StatusCode(StatusCodes.Status400BadRequest, "Invalid request data");
 			}
 
-			UserDto createdUser = await _userRepository.Create(request);
+			await _userRepository.Create(request);
 
 			return StatusCode(StatusCodes.Status200OK);
 		}

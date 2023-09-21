@@ -8,11 +8,11 @@ namespace GraphFlix.Repositories
 
         public Task<MovieDto?> GetById(string id);
 
-        public Task<MovieDto> Create(MovieDto movie);
+        public Task Create(MovieDto movie);
 
-        public Task<MovieDto> Update(MovieDto movieChanges);
+        public Task Update(MovieDto movieChanges);
 
-        public Task<MovieDto> Delete(string id);
+        public Task Delete(string id);
 
         public Task<IEnumerable<MovieDto>> GetRecommendedMovies(int userId);
     }

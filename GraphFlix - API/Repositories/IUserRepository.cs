@@ -13,10 +13,10 @@ namespace GraphFlix.Repositories
 
         public Task<bool> TryVerifyLogin(string username, string passwordHash, out UserDto user);
 
-        public Task<UserDto> Create(LoginDto user);
+        public Task Create(LoginDto user);
 
-        public Task<UserDto> Update(int id, UserDto userChanges);
+        public Task Update(int id, UserDto userChanges);
 
-        public Task<UserDto> Delete(int id);
+        public Task Delete(int id);
     }
 }

@@ -120,7 +120,7 @@ public class Neo4J : INeo4J, IDisposable
     /// </summary>
     /// <param name="query"></param>
     /// <returns></returns>
-    public async Task ExecuteCreateAsync(IQuery query)
+    public async Task ExecuteWriteAsync(IQuery query)
     {
         try
         {

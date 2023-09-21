@@ -2,7 +2,6 @@ global using Xunit;
 global using Autofac.Extras.Moq;
 global using GraphFlix.Controllers;
 global using GraphFlix.DTOs;
-global using GraphFlix.Managers;
 global using GraphFlix.Models;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;

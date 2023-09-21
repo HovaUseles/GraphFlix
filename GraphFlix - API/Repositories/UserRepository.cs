@@ -1,27 +1,49 @@
-﻿using GraphFlix.DTOs;
+﻿using GraphFlix.Database;
+using GraphFlix.DTOs;
+using GraphFlix.Models;
 
 namespace GraphFlix.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    public Task<UserDto> Create(LoginDto user)
+    private readonly INeo4J neo;
+    public UserRepository(INeo4J neo4j)
+    {
+        neo = neo4j;
+    }
+    public async Task Create(LoginDto userDto)
+    {
+        //TODO: Exception handling
+        User user = new User() 
+        {
+            UserName = userDto.Username,
+
+            //TODO: Hash
+            PasswordHash = userDto.Password
+        };
+
+
+        IQuery q1 = new Query().PlainQuery("");
+        await neo.ExecuteWriteAsync(q1);
+    }
+
+    public Task Delete(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<UserDto> Delete(int id)
+    public async Task<IEnumerable<UserDto>> GetAll()
     {
-        throw new NotImplementedException();
+        IQuery q1 = new Query().PlainQuery("");
+        var result = await neo.ExecuteReadAsync<UserDto>(q1);
+        return result;
     }
 
-    public Task<IEnumerable<UserDto>> GetAll()
+    public async Task<UserDto?> GetById(int id)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<UserDto?> GetById(int id)
-    {
-        throw new NotImplementedException();
+        IQuery q1 = new Query().PlainQuery("");
+        var result = await neo.ExecuteReadAsync<UserDto>(q1);
+        return result.FirstOrDefault();
     }
     public Task<string?> GetUserSalt(string username)
     {
@@ -33,7 +55,7 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<UserDto> Update(int id, UserDto userChanges)
+    public Task Update(int id, UserDto userChanges)
     {
         throw new NotImplementedException();
     }

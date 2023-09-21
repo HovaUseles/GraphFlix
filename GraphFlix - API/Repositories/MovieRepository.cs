@@ -12,76 +12,54 @@ public class MovieRepository : IMovieRepository
     {
         neo = neo4J;
     }
-    /// <summary>
-    /// Gets all nodes
-    /// Used for testing
-    /// </summary>
-    public async Task GetNodesAsync()
+    public async Task<IEnumerable<MovieDto>> GetAll()
     {
-        IBuilder builder = new QueryBuilder();
-        IQuery query = builder.Match("n").Return<string>("n").Build();
-        var result = await neo.ExecuteReadAsync(query.ToString());
-        //return testdata;
-    }
-    /// <summary>
-    /// Gets all movies and 
-    /// </summary>
-    /// <returns></returns>
-    public async Task<List<Movie>> GetMoviesAsync()
-    {
-        IBuilder builder = new QueryBuilder();
-        IQuery query = builder.Match("movie:Movie").Return<List<Movie>>("movie").Build();
-        var result =  await neo.ExecuteReadAsync<Movie>(query);
+        IQuery q1 = new Query().PlainQuery("MATCH (m:Movie)-[go:GENRE_OF]->(g:Genre) WITH COLLECT({    Id: split(elementId(g), ':')[2],     Name: g.name }) as genres, m RETURN {Id: split(elementId(m), ':')[2], Title: m.Title, ReleaseDate: m.ReleaseDate, Genres: genres} AS DetailedMovie");
+        var result = await neo.ExecuteReadAsync<MovieDto>(q1);
         return result;
     }
 
-    /// <summary>
-    /// Used for creating movie
-    /// </summary>
-    /// <returns></returns>
-    public async Task CreateMovie(Movie movie)
+    public async Task<MovieDto?> GetById(string id)
     {
-        IBuilder builder = new QueryBuilder();
+        IQuery q1 = new Query().PlainQuery($"MATCH (m:Movie WHERE m.id = {id}) RETURN m LIMIT 1");
+        var result = await neo.ExecuteReadAsync<MovieDto>(q1);
+        return result.FirstOrDefault();
+    }
 
-        IQuery query = builder.Create(movie).Build();
+    public async Task Create(MovieDto movieDto)
+    {
+        Movie movie = new Movie()
+        {
+            Title = movieDto.Title,
+            ReleaseDate = movieDto.ReleaseDate,
+        };
+        IQuery query = new Query().AddCreate(movie);
         try
         {
-            await neo.ExecuteCreateAsync(query);
+            await neo.ExecuteWriteAsync(query);
         }
         catch (Exception e)
         {
-            Log.Logger.Error("Unknow exception | Message: {0}", e.Message);
+            Log.Logger.Error("Unknown error | Message {0}", e);
             //TODO: Handle exception
         }
     }
 
-    public Task<IEnumerable<MovieDto>> GetAll()
+    public Task Update(MovieDto movieChanges)
     {
         throw new NotImplementedException();
     }
 
-    public Task<MovieDto?> GetById(string id)
+    public async Task Delete(string id)
     {
-        throw new NotImplementedException();
+        IQuery query = new Query().PlainQuery($"MATCH (m:Movie WHERE m.Id = {id}) DETACH DELETE m");
+        await neo.ExecuteWriteAsync(query);
     }
 
-    public Task<MovieDto> Create(MovieDto movie)
+    public async Task<IEnumerable<MovieDto>> GetRecommendedMovies(int userId)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<MovieDto> Update(MovieDto movieChanges)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<MovieDto> Delete(string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<MovieDto>> GetRecommendedMovies(int userId)
-    {
-        throw new NotImplementedException();
+        IQuery q1 = new Query().PlainQuery($"MATCH (u:User)-[:RECOMMENDED]->(recMovie:Movie)   WHERE u.Id = {userId} MATCH (recMovie)<-[:RECOMMENDED]-(otherUser:User)-[:RECOMMENDED]->(otherMovie:Movie)     WHERE NOT (u)-[:RECOMMENDED]->(otherMovie) WITH u, otherUser, otherMovie, COUNT(*) AS commonMovies ORDER BY commonMovies DESC RETURN otherMovie, commonMovies");
+        var result = await neo.ExecuteReadAsync<MovieDto>(q1);
+        return result;
     }
 }

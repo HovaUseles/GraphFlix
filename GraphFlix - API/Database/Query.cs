@@ -1,4 +1,5 @@
-﻿using Neo4j.Driver;
+﻿using GraphFlix.Models;
+using Neo4j.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,22 +11,58 @@ using System.Threading.Tasks;
 namespace GraphFlix.Database;
 public interface IQuery
 {
-    public void AddCreate<T>(T entity);
-    public void AddCreate<T>(List<T> listEntity);
-    public void AddDelete<T>(T model);
-    public void AddDetachDelete<T>(T model);
-    public void AddMatch(string match);
+    public IQuery AddCreate<T>(T entity);
+    public IQuery AddCreate<T>(List<T> listEntity);
+    public IQuery AddDelete<T>(T model);
+    public IQuery AddDetachDelete<T>(T model);
+    public IQuery AddMatch(string match);
 
-    public void AddWhere(LambdaExpression condition);
+    public IQuery AddWhere(LambdaExpression condition);
 
-    public void AddReturn<T>(T model);
+    public IQuery AddReturn<T>(T model);
+    public IQuery CreateRelationship<T1, T2>(IEdge edge, int fromId, int toId);
+    public IQuery PlainQuery(string query);
 }
 public class Query : IQuery
 {
-    private Type _returnType;
     private StringBuilder _queryString = new StringBuilder();
+    public IQuery PlainQuery(string query)
+    {
+        _queryString.Append(query);
+        return this;
+    }
+    private void JsonFromObject<T>(T input)
+    {
+        Type entityType = typeof(T);
 
-    public void AddCreate<T>(T entity)
+        if (!entityType.IsClass || entityType == typeof(string))
+        {
+            throw new ArgumentException("Entity must be a non-string class type.");
+        }
+        PropertyInfo[] properties = entityType.GetProperties();
+
+        for (int i = 0; i < properties.Length; i++)
+        {
+            PropertyInfo property = properties[i];
+
+            string propertyName = property.Name;
+            object propertyValue = property.GetValue(input);
+
+            if (propertyValue != null)
+            {
+                if (i > 0)
+                {
+                    _queryString.Append(", ");
+                }
+
+                _queryString.Append($"{propertyName}: '{propertyValue}'");
+            }
+        }
+
+        _queryString.Append("}");
+
+    }
+    public IQuery AddCreate<T>(T entity)
     {
         Type entityType = typeof(T);
 
@@ -58,8 +95,9 @@ public class Query : IQuery
         }
 
         _queryString.Append("})");
+        return this;
     }
-    public void AddCreate<T>(List<T> listEntity)
+    public IQuery AddCreate<T>(List<T> listEntity)
     {
         _queryString.Append("CREATE ");
         for (int i = 0; i < listEntity.Count; i++)
@@ -106,34 +144,49 @@ public class Query : IQuery
                 _queryString.Append(", ");
             }
         }
+        return this;
 
     }
-    public void AddDelete<T>(T model)
+    public IQuery AddDelete<T>(T model)
     {
         _queryString.Append("DELETE ");
+        return this;
     }
-    public void AddDetachDelete<T>(T model)
+    public IQuery AddDetachDelete<T>(T model)
     {
         _queryString.Append("DETACH DELETE ");
+        return this;
     }
-    public void AddMatch(string match)
+    public IQuery AddMatch(string match)
     {
         _queryString.Append("MATCH (");
         _queryString.Append(match);
         _queryString.Append(")");
+        return this;
     }
 
-    public void AddWhere(LambdaExpression condition)
+    public IQuery AddWhere(LambdaExpression condition)
     {
         // Add 'WHERE' logic here
         _queryString.Append("WHERE ");
         _queryString.Append(condition);
+        return this;
     }
-    public void AddReturn<T>(T model)
+    public IQuery AddReturn<T>(T model)
     {
         _queryString.Append("RETURN ");
-        _returnType = model.GetType();
         _queryString.Append(model);
+        return this;
+    }
+    public IQuery CreateRelationship<T1, T2>(IEdge edge, int fromId, int toId)
+    {
+        //(charlie)-[:ACTED_IN {role: 'bud fox'}]->(wallStreet)
+        _queryString.Append($"(fromNode:{typeof(T1).Name} WHERE u.Id = {fromId})");
+        _queryString.Append($"-[:{edge} ");
+        JsonFromObject(edge);
+        _queryString.Append($"]->");
+        _queryString.Append($"toNode:{typeof(T2).Name} WHERE toNode.Id = {toId})");
+        return this;
     }
     public override string ToString()
     {

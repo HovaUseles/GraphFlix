@@ -19,6 +19,6 @@ namespace GraphFlix.Database
         /// <param name="query"></param>
         /// <returns>List of IRecords</returns>
         public Task<List<IRecord>> ExecuteReadAsync(string query);
-        public Task ExecuteCreateAsync(IQuery query);
+        public Task ExecuteWriteAsync(IQuery query);
     }
 }

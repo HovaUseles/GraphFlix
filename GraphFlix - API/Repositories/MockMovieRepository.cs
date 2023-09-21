@@ -5,12 +5,12 @@ namespace GraphFlix.Repositories
 {
     public class MockMovieRepository : IMovieRepository
     {
-        public Task<MovieDto> Create(MovieDto movie)
+        public Task Create(MovieDto movie)
         {
             throw new NotImplementedException();
         }
 
-        public Task<MovieDto> Delete(string id)
+        public Task Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -38,7 +38,7 @@ namespace GraphFlix.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<MovieDto> Update(MovieDto movieChanges)
+        public Task Update(MovieDto movieChanges)
         {
             throw new NotImplementedException();
         }

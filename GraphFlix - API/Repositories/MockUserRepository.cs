@@ -4,12 +4,12 @@ namespace GraphFlix.Repositories
 {
     public class MockUserRepository : IUserRepository
     {
-        public Task<UserDto> Create(LoginDto user)
+        public Task Create(LoginDto user)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UserDto> Delete(int id)
+        public Task Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -34,7 +34,7 @@ namespace GraphFlix.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<UserDto> Update(int id, UserDto userChanges)
+        public Task Update(int id, UserDto userChanges)
         {
             throw new NotImplementedException();
         }

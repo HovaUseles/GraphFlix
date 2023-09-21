@@ -139,6 +139,7 @@
         {
             List<UserDto> samples = new List<UserDto>()
             {
+                new UserDto
                 new UserDto("John Doe") { Id = "1" },
                 new UserDto("Jane Doe") { Id = "2" },
                 new UserDto("Wayne Doe") { Id = "3" },

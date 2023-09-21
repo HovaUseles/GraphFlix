@@ -7,15 +7,5 @@
         public string PasswordHash { get; set; }
         public bool CookieAccept { get; set; }
 
-        public User(
-            string id,
-            string userName,
-            string passwordHash)
-        {
-            Id = id;
-            UserName = userName;
-            PasswordHash = passwordHash;
-            CookieAccept = false;
-        }
     }
 }

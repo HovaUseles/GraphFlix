@@ -40,12 +40,13 @@ namespace GraphFlix.Controllers
         // POST api/<MovieController>
         [HttpPost]
 		[Authorize(Roles = "Admin")]
-		public async Task<ActionResult<MovieDto>> Post([FromBody] MovieDto model)
+		public async Task<ActionResult> Post([FromBody] MovieDto model)
         {
             if (ModelState.IsValid)
             {
-                MovieDto createdModel = await _movieRepository.Create(model);
-                return StatusCode(StatusCodes.Status201Created, createdModel);
+                await _movieRepository.Create(model);
+                //TODO request new added movie
+                return StatusCode(StatusCodes.Status201Created);
             }
             return StatusCode(StatusCodes.Status400BadRequest);
         }
@@ -56,8 +57,8 @@ namespace GraphFlix.Controllers
         {
             if (ModelState.IsValid)
             {
-                MovieDto updatedModel = await _movieRepository.Update(modelChanges);
-                return StatusCode(StatusCodes.Status200OK, updatedModel);
+                await _movieRepository.Update(modelChanges);
+                return StatusCode(StatusCodes.Status200OK);
             }
             return StatusCode(StatusCodes.Status400BadRequest);
         }
@@ -70,11 +71,8 @@ namespace GraphFlix.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            MovieDto deletedModel = await _movieRepository.Delete(id);
-            if (deletedModel == null)
-            {
-                return StatusCode(StatusCodes.Status404NotFound);
-            }
+            await _movieRepository.Delete(id);
+
             return StatusCode(StatusCodes.Status204NoContent);
         }
 	}
