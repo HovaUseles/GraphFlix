@@ -3,8 +3,6 @@ using Microsoft.Extensions.Options;
 using Neo4j.Driver;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Net.WebSockets;
 
 namespace GraphFlix.Database;
 
