@@ -1,6 +1,7 @@
 ﻿using GraphFlix.DTOs;
 
 using GraphFlix.Models;
+using GraphFlix.Processors;
 using GraphFlix.Repositories;
 using GraphFlix.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace GraphFlix.Controllers
 				return StatusCode(StatusCodes.Status400BadRequest, "Invalid request data");
 			}
 
-			string? salt = await _userRepository.GetByUserSalt(request.Username);
+			string? salt = await _userRepository.GetUserSalt(request.Username);
 			if(salt == null)
 			{
 				return StatusCode(StatusCodes.Status400BadRequest, "User could not be found");
@@ -43,8 +44,7 @@ namespace GraphFlix.Controllers
 
 			if(await _userRepository.TryVerifyLogin(request.Username, passwordHash, out UserDto user))
 			{
-				//TokenDto token = _tokenService.CreateToken(user);
-				TokenDto token = AuthProcessor.Generate();
+				TokenDto token = _tokenService.CreateToken(user);
                 return StatusCode(StatusCodes.Status200OK, token);
 			}
 			

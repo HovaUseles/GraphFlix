@@ -1,5 +1,6 @@
 ﻿using GraphFlix.DTOs;
 using GraphFlix.Managers;
+using GraphFlix.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GraphFlix.Controllers
@@ -8,18 +9,18 @@ namespace GraphFlix.Controllers
     [ApiController]
     public class GenreController : ControllerBase
     {
-        private IMovieManager _movieManager { get; }
+        private IMovieRepository _movieRepository { get; }
 
-        public GenreController(IMovieManager movieManager)
+        public GenreController(IMovieRepository movieRepository)
         {
-            _movieManager = movieManager;
+            _movieRepository = movieRepository;
         }
 
         // GET: api/<MovieController>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MovieDto>>> Get()
         {
-            return StatusCode(StatusCodes.Status200OK, await _movieManager.GetMovies());
+            return StatusCode(StatusCodes.Status200OK, await _movieRepository.GetAll());
         }
     }
 }

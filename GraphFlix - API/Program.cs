@@ -1,6 +1,8 @@
 using GraphFlix.Appsettings;
 using GraphFlix.Database;
+using GraphFlix.Processors;
 using GraphFlix.Repositories;
+using GraphFlix.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -17,16 +19,16 @@ builder.Services.AddAuthentication(opt =>
 })
 .AddJwtBearer(options =>
 {
-options.TokenValidationParameters = new TokenValidationParameters
-{
-ValidateIssuer = true,
-ValidateAudience = true,
-ValidateLifetime = true,
-ValidateIssuerSigningKey = true,
-ValidIssuer = "https://localhost:7172",
-ValidAudience = "https://localhost:7172",
-IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TestCertificateAndJwtKomNuForHelvedeHvorMangeTegnSkalDerTil"))
-};
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "https://localhost:7172",
+        ValidAudience = "https://localhost:7172",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TestCertificateAndJwtKomNuForHelvedeHvorMangeTegnSkalDerTil"))
+    };
 });
 
 builder.Services.AddControllers();
@@ -37,6 +39,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<INeo4J, Neo4J>();
 builder.Services.AddScoped<MovieRepository>();
+
+builder.Services.AddScoped<ITokenService, AuthProcessor>();
 
 builder.Services.AddScoped<IMovieRepository, MockMovieRepository>();
 builder.Services.AddScoped<IUserRepository, MockUserRepository>();

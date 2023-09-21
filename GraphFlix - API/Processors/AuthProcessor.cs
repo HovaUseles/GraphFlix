@@ -4,24 +4,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Diagnostics;
 using GraphFlix.DTOs;
+using GraphFlix.Services;
 
-<<<<<<<< HEAD:GraphFlix - API/Services/AuthProcessor.cs
-namespace GraphFlix.Services
-{
-    public class AuthProcessor
-    {
-        private const string _jwtPublicKey = "TestCertificateAndJwtKomNuForHelvedeHvorMangeTegnSkalDerTil"; // Move to appsettings or environment variable
-        private const string _url = "https://localhost:7172"; // Move to appsettings or environment variable
-        private const int _tokenValidity = 60; // Minutes
-
-        public static TokenDto Generate()
-========
 namespace GraphFlix.Processors
 {
-    public class AuthProcessor
+    public class AuthProcessor : ITokenService
     {
-        public static Token Generate()
->>>>>>>> e8ca53db6f4c73c3388798bb9d7aa2a04f926fab:GraphFlix - API/Processors/AuthProcessor.cs
+        public TokenDto CreateToken(UserDto user)
         {
             byte[] tokenKey = GetTokenKey();
             DateTime tokenExpiresTime = SetTokenExpiry();
@@ -30,7 +19,7 @@ namespace GraphFlix.Processors
             return AssignTokenProperties(securityTokenDescriptor, tokenExpiresTime);
         }
 
-        private static byte[] GetTokenKey()
+        private byte[] GetTokenKey()
         {
             try
             {
@@ -43,7 +32,7 @@ namespace GraphFlix.Processors
             }
         }
 
-        private static DateTime SetTokenExpiry()
+        private DateTime SetTokenExpiry()
         {
             try
             {
@@ -56,7 +45,7 @@ namespace GraphFlix.Processors
             }
         }
 
-        private static SecurityTokenDescriptor GetDescriptor(List<Claim> claims, DateTime tokenExpiresTime, byte[] tokenKey)
+        private SecurityTokenDescriptor GetDescriptor(List<Claim> claims, DateTime tokenExpiresTime, byte[] tokenKey)
         {
             return new SecurityTokenDescriptor
             {
@@ -67,27 +56,18 @@ namespace GraphFlix.Processors
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256)
             };
         }
-
-<<<<<<<< HEAD:GraphFlix - API/Services/AuthProcessor.cs
-        private static List<Claim> GetRoleClaim()
-========
-        private static Claim GetRoleClaim()
->>>>>>>> e8ca53db6f4c73c3388798bb9d7aa2a04f926fab:GraphFlix - API/Processors/AuthProcessor.cs
+        private Claim GetRoleClaim()
         {
-            // Get role from db instead
+            // TODO: Get role from db instead
             return new Claim(ClaimTypes.Role, "Admin");
         }
-        private static Claim GetUserIdClaim()
+        private Claim GetUserIdClaim()
         {
-            // Get user id from db instead
+            // TODO: Get user id from db instead
             return new Claim("UserId", "0");
         }
 
-<<<<<<<< HEAD:GraphFlix - API/Services/AuthProcessor.cs
-        private static TokenDto AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
-========
-        private static Token AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
->>>>>>>> e8ca53db6f4c73c3388798bb9d7aa2a04f926fab:GraphFlix - API/Processors/AuthProcessor.cs
+        private TokenDto AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
         {
             TokenDto newToken = new TokenDto();
             JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
@@ -106,7 +86,7 @@ namespace GraphFlix.Processors
             }
         }
 
-        private static string GetAppSettings(string property)
+        private string GetAppSettings(string property)
         {
             IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile($"appsettings.json", true, true);
             IConfigurationRoot config = builder.Build();

@@ -23,7 +23,7 @@ public class UserRepository : IUserRepository
     {
         throw new NotImplementedException();
     }
-    public Task<string?> GetByUserSalt(string username)
+    public Task<string?> GetUserSalt(string username)
     {
         throw new NotImplementedException();
     }

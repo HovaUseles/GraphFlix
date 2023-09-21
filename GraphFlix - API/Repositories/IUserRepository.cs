@@ -9,7 +9,7 @@ namespace GraphFlix.Repositories
 
         public Task<UserDto?> GetById(int id);
 
-        public Task<string?> GetByUserSalt(string username);
+        public Task<string?> GetUserSalt(string username);
 
         public Task<bool> TryVerifyLogin(string username, string passwordHash, out UserDto user);
 
