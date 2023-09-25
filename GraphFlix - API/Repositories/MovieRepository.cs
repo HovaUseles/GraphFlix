@@ -14,7 +14,7 @@ public class MovieRepository : IMovieRepository
     }
     public async Task<IEnumerable<MovieDto>> GetAll()
     {
-        IQuery q1 = new Query().PlainQuery("MATCH (m:Movie)-[go:GENRE_OF]->(g:Genre) WITH COLLECT({    Id: split(elementId(g), ':')[2],     Name: g.name }) as genres, m RETURN {Id: split(elementId(m), ':')[2], Title: m.Title, ReleaseDate: m.ReleaseDate, Genres: genres} AS DetailedMovie");
+        IQuery q1 = new Query().PlainQuery("MATCH (m:Movie)-[go:GENRE_OF]->(g:Genre) WITH COLLECT({    Id: split(elementId(g), ':')[2],     Name: g.name }) as genres, m RETURN {Id: split(elementId(m), ':')[2], Title: m.Title, PosterUrl: m.poster_url, ReleaseDate: m.ReleaseDate, Genres: genres} AS DetailedMovie");
         var result = await neo.ExecuteReadAsync<MovieDto>(q1);
         return result;
     }

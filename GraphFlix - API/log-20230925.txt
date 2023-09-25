@@ -241,3 +241,101 @@
    at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
    at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
    at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 29
+2023-09-25 11:39:38.880 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Unexpected end of input: expected CYPHER, EXPLAIN, PROFILE or Query (line 0, column 0 (offset: 1))
+""
+ ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext() in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 32
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 29
+2023-09-25 16:22:45.515 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Invalid input 'ReleaseDate': expected
+  "!="
+  "%"
+  "*"
+  "+"
+  ","
+  "-"
+  "/"
+  "::"
+  "<"
+  "<="
+  "<>"
+  "="
+  "=~"
+  ">"
+  ">="
+  "AND"
+  "CONTAINS"
+  "ENDS"
+  "IN"
+  "IS"
+  "OR"
+  "STARTS"
+  "XOR"
+  "^"
+  "}" (line 1, column 207 (offset: 206))
+"MATCH (m:Movie)-[go:GENRE_OF]->(g:Genre) WITH COLLECT({    Id: split(elementId(g), ':')[2],     Name: g.name }) as genres, m RETURN {Id: split(elementId(m), ':')[2], Title: m.Title, PosterUrl: m.poster_url ReleaseDate: m.ReleaseDate, Genres: genres} AS DetailedMovie"
+                                                                                                                                                                                                               ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query)
+2023-09-25 16:22:56.263 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Invalid input 'ReleaseDate': expected
+  "!="
+  "%"
+  "*"
+  "+"
+  ","
+  "-"
+  "/"
+  "::"
+  "<"
+  "<="
+  "<>"
+  "="
+  "=~"
+  ">"
+  ">="
+  "AND"
+  "CONTAINS"
+  "ENDS"
+  "IN"
+  "IS"
+  "OR"
+  "STARTS"
+  "XOR"
+  "^"
+  "}" (line 1, column 207 (offset: 206))
+"MATCH (m:Movie)-[go:GENRE_OF]->(g:Genre) WITH COLLECT({    Id: split(elementId(g), ':')[2],     Name: g.name }) as genres, m RETURN {Id: split(elementId(m), ':')[2], Title: m.Title, PosterUrl: m.poster_url ReleaseDate: m.ReleaseDate, Genres: genres} AS DetailedMovie"
+                                                                                                                                                                                                               ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query)

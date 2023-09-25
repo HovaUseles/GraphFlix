@@ -70,7 +70,7 @@ public class UserRepository : IUserRepository
         IQuery q1 = new Query().PlainQuery($"""MATCH (u:User WHERE u.user_name = "{username}" AND u.password_hash = "{passwordHash}") RETURN COUNT(u) LIMIT 1""");
         var result = await neo.ExecuteReadAsync<int>(q1);
 
-        if( result.First() >= 0 )
+        if( result.First() > 0 )
         {
             return true;
         }
