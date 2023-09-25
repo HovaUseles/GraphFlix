@@ -44,10 +44,10 @@ builder.Services.AddTransient<ITokenService, AuthProcessor>();
 builder.Services.AddTransient<IHashingService, HashProcessor>();
 builder.Services.AddTransient<ISaltService, SaltProcessor>();
 
-builder.Services.AddScoped<IMovieRepository, MockMovieRepository>();
-builder.Services.AddScoped<IUserRepository, MockUserRepository>();
-//builder.Services.AddScoped<IMovieRepository, Neo4jMovieRepository>();
-//builder.Services.AddScoped<IUserRepository, Neo4jUserRepository>();
+//builder.Services.AddScoped<IMovieRepository, MockMovieRepository>();
+//builder.Services.AddScoped<IUserRepository, MockUserRepository>();
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddCors(options =>
 {

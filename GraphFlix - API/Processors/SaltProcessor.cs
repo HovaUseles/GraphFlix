@@ -10,7 +10,7 @@ namespace GraphFlix.Processors
         {
             try
             {
-                return new Guid().ToString().Replace("-", "").Substring(0, 16);
+                return Guid.NewGuid().ToString().Replace("-", "").Substring(0, 16);
             }
             catch (Exception e)
             {

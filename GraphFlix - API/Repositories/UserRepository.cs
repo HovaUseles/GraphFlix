@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
         };
 
 
-        IQuery q1 = new Query().Create(user);
+        IQuery q1 = new Query().PlainQuery($$"""CREATE (u:User { user_name: "{{user.UserName}}", password_hash: "{{user.PasswordHash}}", cookie_accept: {{user.CookieAccept}}, salt: "{{salt}}" })""");
         await neo.ExecuteWriteAsync(q1);
     }
 
@@ -41,7 +41,7 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<UserDto>> GetAll()
     {
-        IQuery q1 = new Query().PlainQuery("MATCH (u:User) Return u");
+        IQuery q1 = new Query().PlainQuery("");
         var result = await neo.ExecuteReadAsync<UserDto>(q1);
         return result;
     }
@@ -54,18 +54,20 @@ public class UserRepository : IUserRepository
     }
     public async Task<UserDto?> GetByUsername(string username)
     {
-        IQuery q1 = new Query().PlainQuery($"MATCH (u:User WHERE u.user_name = {username}) RETURN u LIMIT 1");
+        IQuery q1 = new Query().PlainQuery($"""MATCH (u:User WHERE u.user_name = "{username}") RETURN u LIMIT 1""");
         var result = await neo.ExecuteReadAsync<UserDto>(q1);
         return result.FirstOrDefault();
     }
-    public Task<string?> GetUserSalt(string username)
+    public async Task<string?> GetUserSalt(string username)
     {
-        throw new NotImplementedException();
+        IQuery q1 = new Query().PlainQuery($"""MATCH (u:User WHERE u.user_name = "{username}") RETURN u.salt""");
+        var result = await neo.ExecuteReadAsync<string>(q1);
+        return result.FirstOrDefault();
     }
 
     public async Task<bool> VerifyLogin(string username, string passwordHash)
     {
-        IQuery q1 = new Query().PlainQuery($"MATCH (u:User WHERE u.user_name = {username} && u.password_hash = {passwordHash}) RETURN COUNT(u) LIMIT 1");
+        IQuery q1 = new Query().PlainQuery($"""MATCH (u:User WHERE u.user_name = "{username}" AND u.password_hash = "{passwordHash}") RETURN COUNT(u) LIMIT 1""");
         var result = await neo.ExecuteReadAsync<int>(q1);
 
         if( result.First() >= 0 )

@@ -1,0 +1,243 @@
+2023-09-25 11:11:31.363 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Variable `Hova` not defined (line 1, column 35 (offset: 34))
+"MATCH (u:User WHERE u.user_name = Hova) RETURN u.Salt"
+                                   ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query)
+2023-09-25 11:18:47.916 +02:00 [ERR] Failed to execute CREATE (u:User { user_name: Hova, password_hash: BLwuRXivjl28X84FIF1P/mh0M5pOoN5nzbjplUKmttz9VJqHw1w+VhGelbOvlbFZo72tWTyJ9eYHnM7PojaaKw==, cookie_accept: False, salt: 0000000000000000 }) | Message: Neo4j.Driver.ClientException: Invalid input '=': expected
+  "!="
+  "%"
+  "*"
+  "+"
+  "-"
+  "/"
+  "::"
+  "<"
+  "<="
+  "<>"
+  "=~"
+  ">"
+  ">="
+  "CONTAINS"
+  "ENDS"
+  "IN"
+  "IS"
+  "STARTS"
+  "^" (line 1, column 136 (offset: 135))
+"CREATE (u:User { user_name: Hova, password_hash: BLwuRXivjl28X84FIF1P/mh0M5pOoN5nzbjplUKmttz9VJqHw1w+VhGelbOvlbFZo72tWTyJ9eYHnM7PojaaKw==, cookie_accept: False, salt: 0000000000000000 })"
+                                                                                                                                        ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass6_0.<<ExecuteWriteAsync>b__0>d.MoveNext() in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 138
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteWriteAsync(IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 135
+2023-09-25 11:24:17.317 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Variable `Hova` not defined (line 1, column 35 (offset: 34))
+"MATCH (u:User WHERE u.user_name = Hova) RETURN u.salt"
+                                   ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext() in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 32
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 29
+2023-09-25 11:26:03.472 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Variable `Hova` not defined (line 1, column 35 (offset: 34))
+"MATCH (u:User WHERE u.user_name = Hova) RETURN u.salt"
+                                   ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext() in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 32
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 29
+2023-09-25 11:28:13.369 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Invalid input '&': expected
+  "!="
+  "%"
+  ")"
+  "*"
+  "+"
+  "-"
+  "/"
+  "::"
+  "<"
+  "<="
+  "<>"
+  "="
+  "=~"
+  ">"
+  ">="
+  "AND"
+  "CONTAINS"
+  "ENDS"
+  "IN"
+  "IS"
+  "OR"
+  "STARTS"
+  "XOR"
+  "^" (line 1, column 42 (offset: 41))
+"MATCH (u:User WHERE u.user_name = "Hova" && u.password_hash = "JSrSHKkKLxp8l1ndyfmjA/4/vrRcFug1uiy9Xa4nwPd8lvJrHIr53obZynPE4wxbcFCssv3/xPzdyK6bWse6hA==") RETURN COUNT(u) LIMIT 1"
+                                          ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext() in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 32
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 29
+2023-09-25 11:28:57.194 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Invalid input '&': expected
+  "!="
+  "%"
+  ")"
+  "*"
+  "+"
+  "-"
+  "/"
+  "::"
+  "<"
+  "<="
+  "<>"
+  "="
+  "=~"
+  ">"
+  ">="
+  "AND"
+  "CONTAINS"
+  "ENDS"
+  "IN"
+  "IS"
+  "OR"
+  "STARTS"
+  "XOR"
+  "^" (line 1, column 42 (offset: 41))
+"MATCH (u:User WHERE u.user_name = "Hova" && u.password_hash = "vgx7NVwk5OSoXQ3VTJqKLabN+rB3B03Yr6QCMmIQoMtDUEIHbeG3uWouXOGhtjNFy567VEchNOMHb+GOby11yA==") RETURN COUNT(u) LIMIT 1"
+                                          ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext() in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 32
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 29
+2023-09-25 11:29:49.991 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Invalid input '&': expected
+  "!="
+  "%"
+  ")"
+  "*"
+  "+"
+  "-"
+  "/"
+  "::"
+  "<"
+  "<="
+  "<>"
+  "="
+  "=~"
+  ">"
+  ">="
+  "AND"
+  "CONTAINS"
+  "ENDS"
+  "IN"
+  "IS"
+  "OR"
+  "STARTS"
+  "XOR"
+  "^" (line 1, column 42 (offset: 41))
+"MATCH (u:User WHERE u.user_name = "Hova" && u.password_hash = "vgx7NVwk5OSoXQ3VTJqKLabN+rB3B03Yr6QCMmIQoMtDUEIHbeG3uWouXOGhtjNFy567VEchNOMHb+GOby11yA==") RETURN COUNT(u) LIMIT 1"
+                                          ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext() in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 32
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 29
+2023-09-25 11:31:01.957 +02:00 [ERR] Unknow Error occured while reading from database | Message Neo4j.Driver.ClientException: Invalid input '&': expected
+  "!="
+  "%"
+  ")"
+  "*"
+  "+"
+  "-"
+  "/"
+  "::"
+  "<"
+  "<="
+  "<>"
+  "="
+  "=~"
+  ">"
+  ">="
+  "AND"
+  "CONTAINS"
+  "ENDS"
+  "IN"
+  "IS"
+  "OR"
+  "STARTS"
+  "XOR"
+  "^" (line 1, column 42 (offset: 41))
+"MATCH (u:User WHERE u.user_name = "Hova" && u.password_hash = "vgx7NVwk5OSoXQ3VTJqKLabN+rB3B03Yr6QCMmIQoMtDUEIHbeG3uWouXOGhtjNFy567VEchNOMHb+GOby11yA==") RETURN COUNT(u) LIMIT 1"
+                                          ^
+   at Neo4j.Driver.Internal.MessageHandling.ResponsePipelineError.EnsureThrown()
+   at Neo4j.Driver.Internal.Result.ResultCursorBuilder.NextRecordAsync()
+   at Neo4j.Driver.Internal.Result.ResultCursor.FetchAsync()
+   at Neo4j.Driver.ResultCursorExtensions.ToListAsync(IResultCursor result)
+   at GraphFlix.Database.Neo4J.<>c__DisplayClass2_0`1.<<ExecuteReadAsync>b__0>d.MoveNext() in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 32
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncSession.<>c__DisplayClass49_0`1.<<RunTransactionAsync>b__1>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Neo4j.Driver.Internal.AsyncRetryLogic.RetryAsync[T](Func`1 runTxAsyncFunc)
+   at Neo4j.Driver.Internal.Logging.DriverLoggerUtil.TryExecuteAsync[T](ILogger logger, Func`1 func, String message)
+   at GraphFlix.Database.Neo4J.ExecuteReadAsync[T](IQuery query) in C:\Users\bocaj\Documents\GitHub\GraphFlix\GraphFlix - API\Database\Neo4J.cs:line 29
