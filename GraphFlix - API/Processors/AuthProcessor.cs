@@ -10,11 +10,12 @@ namespace GraphFlix.Processors
 {
     public class AuthProcessor : ITokenService
     {
+
         public TokenDto CreateToken(UserDto user)
         {
             byte[] tokenKey = GetTokenKey();
             DateTime tokenExpiresTime = SetTokenExpiry();
-            List<Claim> claims = new List<Claim> { GetRoleClaim(), GetUserIdClaim() };
+            List<Claim> claims = BuildUserClaims(user);
             SecurityTokenDescriptor securityTokenDescriptor = GetDescriptor(claims, tokenExpiresTime, tokenKey);
             return AssignTokenProperties(securityTokenDescriptor, tokenExpiresTime);
         }
@@ -56,17 +57,26 @@ namespace GraphFlix.Processors
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256)
             };
         }
-        private Claim GetRoleClaim()
+        private List<Claim> BuildUserClaims(UserDto user)
         {
-            // TODO: Get role from db instead
-            return new Claim(ClaimTypes.Role, "Admin");
-        }
-        private Claim GetUserIdClaim()
-        {
-            // TODO: Get user id from db instead
-            return new Claim("UserId", "0");
-        }
+            List<Claim> claims = new List<Claim> {
+                new Claim("UserId", user.Id.ToString()),
+                new Claim("Username", user.Username)
+            };
 
+            // Build Role claims
+            foreach(RoleDto role in user.Roles)
+            {
+                claims.Add(new Claim(
+                    ClaimTypes.Role,
+                    role.Name
+                    )
+                );
+
+            }
+
+            return claims;
+        }
         private TokenDto AssignTokenProperties(SecurityTokenDescriptor securityTokenDescriptor, DateTime tokenExpiresTime)
         {
             TokenDto newToken = new TokenDto();

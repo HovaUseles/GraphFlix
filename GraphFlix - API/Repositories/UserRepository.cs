@@ -30,7 +30,18 @@ public class UserRepository : IUserRepository
         };
 
 
-        IQuery q1 = new Query().PlainQuery($$"""CREATE (u:User { user_name: "{{user.UserName}}", password_hash: "{{user.PasswordHash}}", cookie_accept: {{user.CookieAccept}}, salt: "{{salt}}" })""");
+        IQuery q1 = new Query().PlainQuery($$"""
+            CREATE (u:User { 
+                user_name: "{{user.UserName}}", 
+                password_hash: "{{user.PasswordHash}}", 
+                cookie_accept: {{user.CookieAccept}}, 
+                salt: "{{salt}}" })
+            WITH u
+            MATCH (r:Role WHERE r.name = "Customer")
+            WITH u, r
+            CREATE (u)-[ir:IS_ROLE]->(r)
+            RETURN u, ir, r
+        """);
         await neo.ExecuteWriteAsync(q1);
     }
 
@@ -54,7 +65,20 @@ public class UserRepository : IUserRepository
     }
     public async Task<UserDto?> GetByUsername(string username)
     {
-        IQuery q1 = new Query().PlainQuery($"""MATCH (u:User WHERE u.user_name = "{username}") RETURN u LIMIT 1""");
+        IQuery q1 = new Query().PlainQuery($$"""
+            MATCH (u:User WHERE u.user_name = "{{username}}")-[ir:IS_ROLE]->(r:Role) 
+            WITH COLLECT({
+                Id: split(elementId(r), ':')[2],
+                Name: r.name
+            }) as roles, u
+            RETURN {
+                Id: split(elementId(u), ':')[2],
+                Username: u.user_name, 
+                CookieAccept: u.cookie_accept,
+                Salt: u.salt,
+                Roles: roles
+            } AS User LIMIT 1
+            """);
         var result = await neo.ExecuteReadAsync<UserDto>(q1);
         return result.FirstOrDefault();
     }

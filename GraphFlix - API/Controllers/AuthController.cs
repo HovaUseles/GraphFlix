@@ -4,6 +4,7 @@ using GraphFlix.Models;
 using GraphFlix.Processors;
 using GraphFlix.Repositories;
 using GraphFlix.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GraphFlix.Controllers
@@ -25,6 +26,13 @@ namespace GraphFlix.Controllers
             _hashingService = hashingService;
             _tokenService = tokenService;
         }
+
+		[HttpPost("[action]")]
+		[Authorize(Roles = "Customer")]
+		public async Task<ActionResult> VerifyToken()
+		{
+			return Ok();
+		}
 
         [HttpPost("[action]")]
         public async Task<ActionResult<TokenDto>> Login([FromBody] LoginDto request)
